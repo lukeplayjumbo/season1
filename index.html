@@ -78,7 +78,7 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(34px,5vw,56px);l
 .cell.out{background:var(--out);cursor:default}
 .cell.out:hover{background:var(--out)}
 .cell.blank{background:var(--out);cursor:default}
-.cell.tent{box-shadow:inset 0 0 0 2px var(--gold);background:color-mix(in srgb,var(--gold-soft) 70%,var(--surface))}
+.cell.tent{}
 .cell.dim .ev{display:none}
 .cell.dim .nomatch{display:block}
 .nomatch{display:none;font-size:11px;color:var(--muted)}
@@ -91,7 +91,21 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(34px,5vw,56px);l
 .ev .sp{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.06em;color:var(--c);font-weight:500}
 .ev .ti{font-size:12px;line-height:1.25;font-weight:500;overflow-wrap:anywhere}
 .ev .tm{font-family:var(--f-mono);font-size:10px;color:var(--muted)}
-.ev.tentev{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--gold) 55%,transparent)}
+.ev .star{color:var(--gold);font-weight:700}
+/* reflective gold tiles for TENT events */
+:root{--gold-metal:linear-gradient(135deg,#bfa060 0%,#dcc68c 16%,#f6ecce 32%,#e7d5a0 46%,#d2b77a 62%,#eedfb2 78%,#dbc48c 90%,#c2a466 100%);--gold-ink:#3a2a08}
+.ev.tentev,.dev.tentdev{position:relative;overflow:hidden;background:var(--gold-metal);background-size:180% 180%;background-position:0% 50%;border-left-color:#9a7a36;color:var(--gold-ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),inset 0 -1px 0 rgba(90,65,10,.18),0 1px 3px rgba(120,90,20,.18)}
+.ev.tentev .sp,.ev.tentev .tm,.ev.tentev .star,.dev.tentdev .sp,.dev.tentdev .slot,.dev.tentdev .tm,.dev.tentdev .bud,.dev.tentdev .bud span{color:var(--gold-ink)}
+.ev.tentev .tm,.dev.tentdev .tm,.dev.tentdev .slot{opacity:.75}
+.ev.tentev .ti,.dev.tentdev h5{font-weight:600}
+.dev.tentdev .anc{color:var(--gold-ink);border-color:rgba(43,29,0,.45);background:rgba(255,255,255,.35)}
+.dev.tentdev .tag{background:rgba(255,255,255,.45);border-color:rgba(43,29,0,.3);color:var(--gold-ink)}
+.ev.tentev::after,.dev.tentdev::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.35) 45%,transparent 60%);transform:translateX(-120%)}
+.ev.tentev:hover,.dev.tentdev:hover{background-position:100% 50%;transition:background-position .6s ease}
+@media (prefers-reduced-motion:no-preference){
+  .ev.tentev::after,.dev.tentdev::after{animation:sheen 14s ease-in-out infinite}
+  @keyframes sheen{0%,78%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+}
 .sb{font-size:11px;color:var(--muted);line-height:1.3}
 .sb b{font-family:var(--f-display);font-size:15px;color:var(--ink);display:block}
 
@@ -120,6 +134,9 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(34px,5vw,56px);l
 .dev h5{margin:0;font-size:15px;font-weight:600;line-height:1.3}
 .dev .tm{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
 .tags{display:flex;flex-wrap:wrap;gap:5px}
+.anc{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);background:var(--gold-soft);border-radius:3px;padding:1px 5px;margin-right:4px}
+.bud{font-family:var(--f-mono);font-size:12.5px;font-weight:500;color:var(--ink)}
+.bud span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-right:4px}
 .empty{color:var(--muted)}
 
 .sp-NFL{--c:var(--nfl)}.sp-NBA{--c:var(--nba)}.sp-NCAAF{--c:var(--ncaaf)}.sp-NCAAB{--c:var(--ncaab)}.sp-NHL{--c:var(--nhl)}.sp-UCL{--c:var(--ucl)}.sp-UFC{--c:var(--ufc)}.sp-TENNIS{--c:var(--tennis)}.sp-JUMBO{--c:var(--jumbo)}
@@ -131,6 +148,7 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(34px,5vw,56px);l
   .evs{display:flex;flex-wrap:wrap;gap:3px}
   .ev{width:100%;height:5px;padding:0;border-left:0;background:var(--c);border-radius:2px}
   .ev .sp,.ev .ti,.ev .tm{display:none}
+  .ev.tentev{background:var(--gold-metal);height:7px;box-shadow:inset 0 1px 0 rgba(255,255,255,.7)}
   .cell.tent .dhead::after{content:"★";color:var(--gold);font-size:12px}
   .sb{display:none}
   .drawer{top:auto;width:100%;max-height:82vh;border-left:0;border-top:1px solid var(--line);border-radius:12px 12px 0 0;padding-left:env(safe-area-inset-left,0px)}
@@ -177,226 +195,226 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(34px,5vw,56px);l
 
 <script>
 let DATA = `
-1201|NBA|Knicks at Bulls|8:00p · NBC|PRIME BIGMKT
-1201|NBA|Jazz at Warriors|11:00p · NBC|PRIME STAR
-1201|NCAAB|SEC/ACC Challenge: No. 2 Duke at No. 1 Florida|9:30p · ESPN|TOP25 RIVAL PRIME
-1201|NCAAB|SEC/ACC Challenge: No. 19 Arkansas at UNC (7:30p ESPN) + No. 7 Texas at No. 10 Louisville (9:00p ESPN2)|7:30p & 9:00p · ESPN/ESPN2|TOP25
-1202|NCAAB|SEC/ACC Challenge: No. 24 Kentucky at No. 6 Virginia + No. 22 Vanderbilt at Notre Dame|7:15p · ESPN/ACCN|TOP25
-1202|NCAAB|SEC/ACC Challenge: No. 18 Alabama at No. 17 Miami|9:15p · ESPN|TOP25
-1203|NFL|TNF: Chiefs at Rams|8:15p · Prime|PRIME STAR BIGMKT
-1204|NCAAF|Big 12 Championship|8:00p · ABC · AT&T Stadium|TENT PRIME
-1204|NCAAF|Pac-12 Championship|8:00p · CBS/Paramount+ · campus site|TENT
-1204|NBA|NBA Cup Quarterfinals|Prime|ELIM TBD
-1205|NCAAF|SEC Championship|4:00p · ABC · Atlanta|TENT
-1205|NCAAF|Big Ten Championship|8:00p · FOX · Indianapolis|TENT PRIME
-1205|NCAAF|ACC Championship|12:00p · ABC · Charlotte|TENT
-1205|NCAAB|No. 10 Louisville at No. 20 Michigan|12:00p · Peacock|TOP25
-1205|NBA|NBA Cup Quarterfinals (night 2)|Prime|ELIM TBD
-1206|NCAAF|CFP Selection Sunday: 12-team bracket reveal|ESPN · time TBA|TENT
-1206|NFL|SNF: Texans at Steelers|8:20p · NBC|PRIME
-1206|NFL|Bills at Patriots|4:25p · CBS|RIVAL STAR
-1207|NFL|MNF: Cowboys at Seahawks|8:15p · ESPN|PRIME BIGMKT
-1208|UCL|Barcelona vs. Man City|3:00p · Paramount+|GLOBAL STAR
-1208|NCAAB|Jimmy V Classic: Georgia vs. No. 2 Duke|9:00p · ESPN · MSG|TOP25 BIGMKT
-1208|NCAAB|Jimmy V Classic: No. 18 Alabama vs. No. 8 Houston|6:30p · ESPN · MSG|TOP25
-1208|NBA|NBA Cup Semifinal(s)|Prime|ELIM TBD
-1209|UCL|Arsenal vs. Real Madrid|3:00p · Paramount+|GLOBAL STAR
-1209|NBA|NBA Cup Semifinal (if Wed)|Prime|ELIM TBD
-1210|NFL|TNF: Vikings at Patriots|8:15p · Prime|PRIME
-1210|NHL|Penguins vs. Panthers|7:00p · ESPN|STAR
-1210|NHL|Capitals vs. Kraken|9:30p · ESPN|STAR
-1211|NBA|NBA Cup Championship|Prime · Hinkle Fieldhouse|ELIM
-1212|NCAAF|Heisman Trophy Ceremony|Evening · time TBA|TENT AWARD
-1212|NCAAF|Army vs. Navy|3:00p · CBS · MetLife Stadium|RIVAL
-1212|NCAAB|No. 10 Louisville at No. 24 Kentucky|4:00p · ABC|TOP25 RIVAL
-1212|NBA|Knicks at Heat|8:30p · ABC|PRIME BIGMKT STAR
-1212|UFC|UFC 335: Oliveira vs. Lopes (BMF title)|Paramount+ · T-Mobile Arena, Las Vegas|STAR
-1213|NFL|SNF: Bills at Packers|8:20p · NBC|PRIME STAR
-1213|NFL|Rams at 49ers|4:25p · FOX|RIVAL BIGMKT
-1213|NFL|Chiefs at Bengals|4:25p · FOX|STAR
-1214|NFL|MNF: Steelers at Jaguars|8:15p · ESPN|PRIME
-1214|NBA|76ers at Magic|7:00p · Peacock|STAR
-1215|NBA|Spurs at Cavaliers|8:00p · NBC|PRIME STAR
-1215|NBA|Nuggets at Trail Blazers|11:00p · NBC|STAR
-1216|NBA|Lakers at Timberwolves|9:30p · ESPN|PRIME STAR BIGMKT
-1217|NFL|TNF: 49ers at Chargers|8:15p · Prime|PRIME BIGMKT
-1218|NCAAF|CFP First Round|8:00p · ESPN|TENT ELIM TBD
-1218|NBA|Clippers at Heat|7:00p · Prime|PRIME BIGMKT
-1219|NCAAF|CFP First Round tripleheader|12:00p ABC · 3:30p & 7:30p TNT|TENT ELIM TBD
-1219|NFL|Seahawks at Eagles + Bears at Bills|5:00p FOX · 8:20p CBS|PRIME STAR
-1219|NCAAB|CBS Sports Classic: UNC vs. No. 24 Kentucky|2:30p · CBS · MSG|TOP25 RIVAL BIGMKT
-1219|NCAAB|CBS Sports Classic: No. 15 Kansas vs. Ohio State|12:00p · CBS · MSG|TOP25
-1220|NFL|SNF: Lions at Vikings|8:20p · NBC|PRIME RIVAL
-1220|NFL|Cowboys at Rams|4:25p · CBS|BIGMKT
-1220|NFL|Ravens at Steelers|1:00p · CBS|RIVAL
-1221|NFL|MNF: Patriots at Chiefs|8:15p · ESPN|PRIME STAR
-1221|NBA|Knicks at Cavaliers (2026 East Finals rematch)|7:00p · Peacock|RIVAL BIGMKT
-1221|NHL|Hurricanes at Golden Knights (Stanley Cup Final rematch)|10:00p · T-Mobile Arena|RIVAL
-1222|NBA|Pistons at Thunder|8:00p · NBC|PRIME STAR
-1222|NBA|Mavericks at Warriors|10:30p · NBC|STAR BIGMKT
-1223|NBA|Rockets at 76ers|7:30p · Prime|STAR
-1223|NBA|Nuggets at Lakers|10:00p · Prime|STAR BIGMKT
-1224|NFL|TNF: Texans at Eagles|8:15p · Prime|PRIME HOLIDAY
-1224|NCAAF|Hawai'i Bowl|7:00p · ESPN · Honolulu|HOLIDAY TBD
-1225|NBA|Spurs at Knicks (2026 Finals rematch)|12:00p · ABC/ESPN|TENT HOLIDAY RIVAL BIGMKT
-1225|NBA|Heat at Celtics|2:30p · ABC/ESPN|TENT HOLIDAY STAR BIGMKT
-1225|NBA|76ers at Lakers (LeBron's return to LA)|5:00p · ABC/ESPN|TENT HOLIDAY STAR BIGMKT
-1225|NBA|Thunder at Timberwolves|8:00p · ABC/ESPN|TENT HOLIDAY STAR
-1225|NBA|Nuggets at Warriors|10:30p · ABC/ESPN|TENT HOLIDAY STAR
-1225|NFL|Packers at Bears|1:00p · Netflix|TENT HOLIDAY RIVAL NOVEL
-1225|NFL|Bills at Broncos|4:30p · Netflix|TENT HOLIDAY STAR NOVEL
-1225|NFL|Rams at Seahawks|8:15p · FOX|TENT HOLIDAY RIVAL PRIME
-1226|NFL|Saturday game 1|4:30p · NFL Network|PRIME TBD
-1226|NFL|Saturday game 2|8:00p · NFL Network|PRIME TBD
-1226|NCAAF|Pinstripe Bowl|12:00p · ABC · Yankee Stadium|BIGMKT HOLIDAY TBD
-1227|NFL|49ers at Chiefs|4:25p · CBS|STAR
-1227|NFL|SNF: Jaguars at Cowboys|8:20p · NBC|PRIME BIGMKT
-1227|NFL|Patriots at Jets|1:00p · CBS|RIVAL BIGMKT
-1228|NFL|MNF: Giants at Lions|8:15p · ESPN|PRIME BIGMKT
-1228|NBA|Cavaliers at Celtics|8:00p · NBC|BIGMKT
-1228|NBA|Timberwolves at Nuggets|10:30p · NBC|STAR
-1228|NCAAF|Holiday Bowl|5:00p · The CW · San Diego|HOLIDAY TBD
-1229|NBA|Rockets at Lakers|10:30p · NBC|PRIME BIGMKT STAR
-1229|NBA|Heat at Mavericks|8:00p · NBC|STAR
-1229|NCAAF|Alamo Bowl|9:00p · ESPN · San Antonio|PRIME HOLIDAY TBD
-1230|NCAAF|CFP Quarterfinal: Fiesta Bowl|7:30p · TNT|TENT ELIM PRIME TBD
-1230|NCAAF|Gator Bowl|11:30a · ESPN · Jacksonville|HOLIDAY TBD
-1230|NCAAF|Music City Bowl|3:00p · ESPN · Nashville|HOLIDAY TBD
-1231|NHL|Winter Classic: Avalanche at Mammoth|6:00p (4:00p MT) · TNT · Rice-Eccles Stadium|NOVEL HOLIDAY
-1231|NFL|TNF: Ravens at Bengals|8:15p · Prime|PRIME RIVAL HOLIDAY
-1231|NBA|Nuggets at Timberwolves|4:00p · Prime|STAR HOLIDAY
-1231|NCAAF|ReliaQuest Bowl|12:00p · ESPN · Tampa|HOLIDAY TBD
-1231|NCAAF|Las Vegas Bowl|3:45p · ESPN · Allegiant Stadium|HOLIDAY TBD
-0101|NCAAF|CFP Quarterfinal|12:00p · TNT|TENT ELIM HOLIDAY TBD
-0101|NCAAF|CFP Quarterfinal|4:00p · ABC/ESPN|TENT ELIM HOLIDAY TBD
-0101|NCAAF|CFP Quarterfinal|8:00p · ESPN|TENT ELIM PRIME TBD
-0102|NFL|Week 17 Saturday game 1|4:30p · NBC|PRIME TBD
-0102|NFL|Week 17 Saturday game 2|8:00p · Peacock|PRIME TBD
-0102|NCAAF|Citrus Bowl|12:00p · ABC · Orlando|HOLIDAY TBD
-0102|NCAAB|No. 5 Michigan State at No. 25 Nebraska|3:45p · CBS|TOP25
-0103|NFL|SNF: Eagles at 49ers|8:20p · NBC|PRIME STAR
-0103|NFL|Lions at Bears|4:25p · FOX|RIVAL BIGMKT
-0103|NFL|Giants at Cowboys|1:00p · FOX|RIVAL BIGMKT
-0104|NFL|MNF: Texans at Packers|8:15p · ESPN|PRIME
-0105|NBA|Timberwolves at Rockets|8:00p · NBC|PRIME STAR
-0105|NBA|Suns at Nuggets|10:00p · NBC|STAR
-0105|NCAAB|No. 20 Michigan at No. 25 Nebraska|7:00p · Peacock|TOP25
-0106|NBA|Knicks at Warriors|10:00p · ESPN|PRIME BIGMKT STAR
-0106|NBA|Thunder at 76ers|7:30p · ESPN|STAR
-0107|NBA|Celtics at Lakers|10:00p · Prime|BIGMKT RIVAL
-0107|NHL|Blackhawks vs. Rangers|7:00p · ESPN|BIGMKT
-0107|NHL|Wild vs. Golden Knights|9:30p · ESPN|STAR
-0108|NBA|Heat at 76ers|7:00p · ESPN|STAR
-0108|NBA|Suns at Mavericks|9:30p · ESPN|STAR
-0109|NFL|Week 18 game|1:00p · Netflix|TENT ELIM NOVEL TBD
-0109|NFL|Week 18 game|4:30p · ESPN/ABC|TENT ELIM TBD
-0109|NFL|Week 18 game|8:00p · ESPN/ABC|TENT ELIM PRIME TBD
-0109|NCAAB|No. 15 Kansas at No. 23 BYU|ESPN · time TBA|TOP25
-0109|NCAAB|No. 5 Michigan State at No. 9 UCLA|8:00p · FOX|TOP25 PRIME
-0110|NFL|Week 18 SNF (win-and-in game)|8:20p · NBC|ELIM PRIME TBD
-0110|NFL|Steelers at Ravens|time TBD|RIVAL ELIM TBD
-0110|NFL|Lions at Packers|time TBD|RIVAL ELIM TBD
-0111|NBA|Nuggets at Knicks|7:30p · Peacock|BIGMKT STAR
-0111|NBA|Lakers at Clippers|10:00p · Peacock|RIVAL BIGMKT STAR
-0112|NCAAB|Marquette at No. 4 UConn|7:00p · TNT|TOP25
-0112|NBA|Kings at Warriors|11:00p · NBC|STAR
-0112|NCAAB|No. 5 Michigan State at No. 21 USC|10:00p · Peacock|TOP25
-0113|NBA|Knicks at Celtics|7:00p · ESPN|PRIME RIVAL BIGMKT
-0113|NBA|Rockets at Thunder|9:30p · ESPN|STAR
-0113|NCAAB|Iowa State at No. 8 Houston|9:00p · Peacock|TOP25
-0114|NCAAF|CFP Semifinal: Orange Bowl|7:30p · TNT|ELIM PRIME TBD
-0114|NBA|Paris Game: Pelicans vs. Spurs (Wemby in France)|2:00p · Prime|NOVEL GLOBAL STAR
-0114|NHL|Panthers vs. Wild|9:30p · ESPN|STAR
-0115|NCAAF|CFP Semifinal: Sugar Bowl|7:30p · ABC/ESPN|ELIM PRIME TBD
-0116|NFL|Wild Card|4:30p|TENT ELIM TBD
-0116|NFL|Wild Card|8:00p|TENT ELIM PRIME TBD
-0116|NHL|Bruins vs. Rangers (Original Six)|12:00p · ABC|RIVAL BIGMKT
-0116|NCAAB|No. 1 Florida at No. 18 Alabama|Time/TV TBA|TOP25
-0116|NCAAB|No. 6 Virginia at No. 17 Miami|6:00p · ESPN|TOP25
-0117|NFL|Wild Card|1:00p|TENT ELIM TBD
-0117|NFL|Wild Card|4:30p|TENT ELIM TBD
-0117|NFL|Wild Card|8:15p · NBC|TENT ELIM PRIME TBD
-0117|NBA|Manchester Game: Spurs vs. Pelicans|10:30a · Prime|NOVEL GLOBAL STAR
-0117|NHL|Golden Knights at Hurricanes (Stanley Cup Final rematch)|6:00p|RIVAL
-0118|NFL|Wild Card MNF|8:15p · ESPN/ABC|TENT ELIM PRIME HOLIDAY TBD
-0118|NBA|MLK Day: Timberwolves at Knicks|5:00p · NBC|HOLIDAY BIGMKT
-0118|NBA|MLK Day: Pistons at Cavaliers|12:00p · NBC|HOLIDAY RIVAL
-0119|UCL|Inter vs. Liverpool|3:00p · Paramount+|GLOBAL STAR
-0119|NBA|Jazz at Nuggets|10:00p · NBC|STAR
-0119|NCAAB|No. 17 Miami at No. 10 Louisville|7:00p · ESPN|TOP25
-0119|NCAAB|No. 25 Nebraska at No. 3 Illinois|9:00p · Peacock|TOP25
-0120|NBA|Heat at Spurs|9:30p · ESPN|STAR
-0121|NBA|76ers at Celtics|7:30p · Prime|RIVAL BIGMKT STAR
-0121|NBA|Lakers at Warriors|10:00p · Prime|STAR BIGMKT
-0121|NHL|Red Wings vs. Wild|9:00p · ESPN|STAR
-0122|NBA|Timberwolves at Spurs|9:30p · ESPN|STAR
-0122|NBA|Knicks at Hawks|7:00p · ESPN|BIGMKT
-0122|NCAAB|No. 9 UCLA at No. 25 Nebraska|Time/TV TBA|TOP25
-0123|NFL|Divisional|4:30p|ELIM TBD
-0123|NFL|Divisional|8:15p|ELIM PRIME TBD
-0123|NCAAB|No. 20 Michigan at No. 21 USC|3:00p · NBC|TOP25
-0123|NCAAB|No. 11 Tennessee at No. 24 Kentucky|2:00p · ESPN|TOP25 RIVAL
-0124|NFL|Divisional|3:00p|ELIM TBD
-0124|NFL|Divisional|6:30p|ELIM PRIME TBD
-0124|NBA|Thunder at Warriors|8:30p · NBC|STAR
-0125|NCAAF|CFP National Championship|7:30p · ABC/ESPN · Allegiant Stadium|TENT PRIME TBD
-0126|NBA|Rivals Week: Thunder at Lakers|11:00p · NBC|RIVAL STAR BIGMKT
-0126|NBA|Rivals Week: Rockets at Spurs|8:00p · NBC|RIVAL STAR
-0126|TENNIS|Australian Open night session: Quarterfinals|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM
-0127|NBA|Rivals Week: Nuggets at Timberwolves|9:30p · ESPN|RIVAL STAR
-0127|NBA|Rivals Week: Pistons at Cavaliers|7:00p · ESPN|RIVAL
-0127|TENNIS|Australian Open night session: Quarterfinals|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM
-0128|NBA|Rivals Week: Heat at Bucks|9:30p · Prime|RIVAL STAR
-0128|NBA|Hawks at Knicks|7:00p · Prime|BIGMKT
-0128|TENNIS|Australian Open: Women's semifinals|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM
-0129|NBA|Cavaliers at Raptors|7:00p · ESPN|GLOBAL
-0129|NCAAB|No. 4 UConn at No. 13 St. John's|Madison Square Garden · time/TV TBA|TOP25 RIVAL BIGMKT
-0129|TENNIS|Australian Open: Men's semifinals|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM
-0130|NBA|Lakers at Knicks (Lakers' only MSG visit)|8:30p · ABC|PRIME BIGMKT STAR
-0130|NBA|Spurs at Warriors|5:30p · ABC|STAR
-0130|UFC|UFC 336: Van vs. Kape (flyweight title)|Paramount+ · Toronto|STAR GLOBAL
-0130|TENNIS|Australian Open: Women's final|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM
-0131|NFL|NFC Championship|3:00p · FOX|TENT ELIM
-0131|NFL|AFC Championship|6:30p · CBS|TENT ELIM PRIME
-0131|TENNIS|Australian Open: Men's final|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM
-0131|NHL|Flyers vs. Penguins|12:00p · ABC|RIVAL
-0201|NBA|Spurs at Warriors|10:00p · Peacock|STAR
-0201|NCAAB|No. 17 Miami at No. 2 Duke|7:00p · ESPN|TOP25
-0201|NCAAB|No. 15 Kansas at No. 8 Houston|9:00p · ESPN|TOP25
-0202|NBA|Lakers at Celtics|8:00p · NBC|PRIME RIVAL BIGMKT STAR
-0202|NCAAB|No. 9 UCLA at No. 3 Illinois|9:00p · Peacock|TOP25
-0202|NCAAB|No. 13 St. John's at Marquette|7:30p · TNT|TOP25 BIGMKT
-0203|NBA|Pioneers Classic: Knicks at Pistons|7:00p · ESPN|BIGMKT NOVEL
-0203|NBA|Jazz at Rockets|9:30p · ESPN|STAR
-0204|NBA|Mavericks at Nuggets|10:00p · Prime|STAR
-0205|NBA|Pacers at Thunder (2025 Finals rematch)|9:30p · Prime|RIVAL STAR
-0205|NCAAB|No. 5 Michigan State at No. 3 Illinois|8:00p · FOX|TOP25 PRIME
-0205|NHL|All-Star Skills Competition|7:00p · ESPN · UBS Arena|NOVEL STAR
-0206|NBA|Lakers at Spurs|8:30p · ABC|PRIME STAR BIGMKT
-0206|NBA|Trail Blazers at Grizzlies (Ja Morant's return)|5:30p · Prime|STAR
-0206|NHL|All-Star Game|3:00p · ABC · UBS Arena|TENT NOVEL STAR
-0206|NCAAB|No. 16 Texas Tech at No. 15 Kansas|12:00p · ABC|TOP25
-0206|NCAAB|No. 2 Duke at No. 6 Virginia|6:00p · ESPN|TOP25
-0207|NBA|Celtics at 76ers|7:00p · NBC|PRIME RIVAL BIGMKT
-0207|NBA|Knicks at Thunder|9:30p · NBC|STAR BIGMKT
-0208|NBA|Lakers at Suns|9:30p · Peacock|STAR BIGMKT
-0208|NCAAB|No. 10 Louisville at UNC|7:00p · ESPN|TOP25
-0208|NBA|Heat at Hawks|7:00p · Peacock|STAR
-0209|NBA|Rockets at Jazz|10:00p · NBC|PRIME
-0209|NBA|Spurs at Mavericks|8:00p · NBC|STAR
-0209|NCAAB|No. 3 Illinois at No. 20 Michigan|7:00p · Peacock|TOP25
-0210|NBA|Clippers at Lakers|10:00p · ESPN|RIVAL BIGMKT
-0210|NBA|Warriors at Celtics|7:30p · ESPN|RIVAL STAR BIGMKT
-0211|NFL|NFL Honors|Evening · time TBA|AWARD STAR
-0211|NBA|Spurs at Thunder|9:30p · Prime|RIVAL STAR
-0211|NBA|Knicks at 76ers|7:00p · Prime|RIVAL BIGMKT
-0212|NBA|Nuggets at Lakers|10:30p · ESPN|STAR BIGMKT
-0212|NBA|Timberwolves at Celtics|8:00p · Prime|STAR BIGMKT
-0213|NBA|Warriors at Knicks|8:30p · ABC|PRIME BIGMKT STAR
-0213|NBA|76ers at Thunder|5:30p · Prime|STAR
-0213|NCAAB|No. 5 Michigan State at No. 20 Michigan|1:00p · CBS|TOP25 RIVAL
-0213|NCAAB|North Carolina at No. 2 Duke|5:30p · ABC|TOP25 RIVAL
-0214|NFL|Super Bowl LXI|6:30p · ESPN/ABC · SoFi Stadium|TENT PRIME HOLIDAY STAR
+1201|NBA|Knicks at Bulls|8:00p · NBC|PRIME BIGMKT||
+1201|NBA|Jazz at Warriors|11:00p · NBC|PRIME STAR||
+1201|NCAAB|SEC/ACC Challenge: No. 2 Duke at No. 1 Florida|9:30p · ESPN|TOP25 RIVAL PRIME||
+1201|NCAAB|SEC/ACC Challenge: No. 19 Arkansas at UNC (7:30p ESPN) + No. 7 Texas at No. 10 Louisville (9:00p ESPN2)|7:30p & 9:00p · ESPN/ESPN2|TOP25||
+1202|NCAAB|SEC/ACC Challenge: No. 24 Kentucky at No. 6 Virginia + No. 22 Vanderbilt at Notre Dame|7:15p · ESPN/ACCN|TOP25||
+1202|NCAAB|SEC/ACC Challenge: No. 18 Alabama at No. 17 Miami|9:15p · ESPN|TOP25||
+1203|NFL|TNF: Chiefs at Rams|8:15p · Prime|PRIME STAR BIGMKT||
+1204|NCAAF|Big 12 Championship|8:00p · ABC · AT&T Stadium|PRIME TENT|Launch|
+1204|NCAAF|Pac-12 Championship|8:00p · CBS/Paramount+ · campus site|TENT|Launch|
+1204|NBA|NBA Cup Quarterfinals|Prime|ELIM TBD||
+1205|NCAAF|SEC Championship|4:00p · ABC · Atlanta|TENT|Launch|
+1205|NCAAF|Big Ten Championship|8:00p · FOX · Indianapolis|TENT PRIME|Launch|
+1205|NCAAF|ACC Championship|12:00p · ABC · Charlotte|TENT|Launch|
+1205|NCAAB|No. 10 Louisville at No. 20 Michigan|12:00p · Peacock|TOP25||
+1205|NBA|NBA Cup Quarterfinals (night 2)|Prime|ELIM TBD||
+1206|NCAAF|CFP Selection Sunday: 12-team bracket reveal|ESPN · time TBA|TENT|Launch|
+1206|NFL|SNF: Texans at Steelers|8:20p · NBC|PRIME||
+1206|NFL|Bills at Patriots|4:25p · CBS|RIVAL STAR||
+1207|NFL|MNF: Cowboys at Seahawks|8:15p · ESPN|PRIME BIGMKT||
+1208|UCL|Barcelona vs. Man City|3:00p · Paramount+|GLOBAL STAR||
+1208|NCAAB|Jimmy V Classic: Georgia vs. No. 2 Duke|9:00p · ESPN · MSG|TOP25 BIGMKT|Tentpole|
+1208|NCAAB|Jimmy V Classic: No. 18 Alabama vs. No. 8 Houston|6:30p · ESPN · MSG|TOP25|Tentpole|
+1208|NBA|NBA Cup Semifinal(s)|Prime|ELIM TBD||
+1209|UCL|Arsenal vs. Real Madrid|3:00p · Paramount+|GLOBAL STAR||
+1209|NBA|NBA Cup Semifinal (if Wed)|Prime|ELIM TBD||
+1210|NFL|TNF: Vikings at Patriots|8:15p · Prime|PRIME||
+1210|NHL|Penguins vs. Panthers|7:00p · ESPN|STAR||
+1210|NHL|Capitals vs. Kraken|9:30p · ESPN|STAR||
+1211|NBA|NBA Cup Championship|Prime · Hinkle Fieldhouse|ELIM|Tentpole|
+1212|NCAAF|Heisman Trophy Ceremony|Evening · time TBA|TENT AWARD|Tentpole|
+1212|NCAAF|Army vs. Navy|3:00p · CBS · MetLife Stadium|RIVAL||
+1212|NCAAB|No. 10 Louisville at No. 24 Kentucky|4:00p · ABC|TOP25 RIVAL||
+1212|NBA|Knicks at Heat|8:30p · ABC|PRIME BIGMKT STAR||
+1212|UFC|UFC 335: Oliveira vs. Lopes (BMF title)|Paramount+ · T-Mobile Arena, Las Vegas|STAR||
+1213|NFL|SNF: Bills at Packers|8:20p · NBC|PRIME STAR||
+1213|NFL|Rams at 49ers|4:25p · FOX|RIVAL BIGMKT||
+1213|NFL|Chiefs at Bengals|4:25p · FOX|STAR||
+1214|NFL|MNF: Steelers at Jaguars|8:15p · ESPN|PRIME||
+1214|NBA|76ers at Magic|7:00p · Peacock|STAR||
+1215|NBA|Spurs at Cavaliers|8:00p · NBC|PRIME STAR||
+1215|NBA|Nuggets at Trail Blazers|11:00p · NBC|STAR||
+1216|NBA|Lakers at Timberwolves|9:30p · ESPN|PRIME STAR BIGMKT||
+1217|NFL|TNF: 49ers at Chargers|8:15p · Prime|PRIME BIGMKT||
+1218|NCAAF|CFP First Round|8:00p · ESPN|TENT ELIM TBD|Tentpole|
+1218|NBA|Clippers at Heat|7:00p · Prime|PRIME BIGMKT||
+1219|NCAAF|CFP First Round tripleheader|12:00p ABC · 3:30p & 7:30p TNT|TENT ELIM TBD|Tentpole|
+1219|NFL|Seahawks at Eagles + Bears at Bills|5:00p FOX · 8:20p CBS|PRIME STAR||
+1219|NCAAB|CBS Sports Classic: UNC vs. No. 24 Kentucky|2:30p · CBS · MSG|TOP25 RIVAL BIGMKT|Tentpole|
+1219|NCAAB|CBS Sports Classic: No. 15 Kansas vs. Ohio State|12:00p · CBS · MSG|TOP25|Tentpole|
+1220|NFL|SNF: Lions at Vikings|8:20p · NBC|PRIME RIVAL||
+1220|NFL|Cowboys at Rams|4:25p · CBS|BIGMKT||
+1220|NFL|Ravens at Steelers|1:00p · CBS|RIVAL||
+1221|NFL|MNF: Patriots at Chiefs|8:15p · ESPN|PRIME STAR||
+1221|NBA|Knicks at Cavaliers (2026 East Finals rematch)|7:00p · Peacock|RIVAL BIGMKT||
+1221|NHL|Hurricanes at Golden Knights (Stanley Cup Final rematch)|10:00p · T-Mobile Arena|RIVAL||
+1222|NBA|Pistons at Thunder|8:00p · NBC|PRIME STAR||
+1222|NBA|Mavericks at Warriors|10:30p · NBC|STAR BIGMKT||
+1223|NBA|Rockets at 76ers|7:30p · Prime|STAR||
+1223|NBA|Nuggets at Lakers|10:00p · Prime|STAR BIGMKT||
+1224|NFL|TNF: Texans at Eagles|8:15p · Prime|PRIME HOLIDAY||
+1224|NCAAF|Hawai'i Bowl|7:00p · ESPN · Honolulu|HOLIDAY TBD||
+1225|NBA|Spurs at Knicks (2026 Finals rematch)|12:00p · ABC/ESPN|TENT HOLIDAY RIVAL BIGMKT|Tentpole|
+1225|NBA|Heat at Celtics|2:30p · ABC/ESPN|TENT HOLIDAY STAR BIGMKT|Tentpole|
+1225|NBA|76ers at Lakers (LeBron's return to LA)|5:00p · ABC/ESPN|TENT HOLIDAY STAR BIGMKT|Tentpole|
+1225|NBA|Thunder at Timberwolves|8:00p · ABC/ESPN|TENT HOLIDAY STAR|Tentpole|
+1225|NBA|Nuggets at Warriors|10:30p · ABC/ESPN|TENT HOLIDAY STAR|Tentpole|
+1225|NFL|Packers at Bears|1:00p · Netflix|TENT HOLIDAY RIVAL NOVEL|Tentpole|
+1225|NFL|Bills at Broncos|4:30p · Netflix|TENT HOLIDAY STAR NOVEL|Tentpole|
+1225|NFL|Rams at Seahawks|8:15p · FOX|TENT HOLIDAY RIVAL PRIME|Tentpole|
+1226|NFL|Saturday game 1|4:30p · NFL Network|PRIME TBD||
+1226|NFL|Saturday game 2|8:00p · NFL Network|PRIME TBD||
+1226|NCAAF|Pinstripe Bowl|12:00p · ABC · Yankee Stadium|BIGMKT HOLIDAY TBD||
+1227|NFL|49ers at Chiefs|4:25p · CBS|STAR||
+1227|NFL|SNF: Jaguars at Cowboys|8:20p · NBC|PRIME BIGMKT||
+1227|NFL|Patriots at Jets|1:00p · CBS|RIVAL BIGMKT||
+1228|NFL|MNF: Giants at Lions|8:15p · ESPN|PRIME BIGMKT||
+1228|NBA|Cavaliers at Celtics|8:00p · NBC|BIGMKT||
+1228|NBA|Timberwolves at Nuggets|10:30p · NBC|STAR||
+1228|NCAAF|Holiday Bowl|5:00p · The CW · San Diego|HOLIDAY TBD||
+1229|NBA|Rockets at Lakers|10:30p · NBC|PRIME BIGMKT STAR||
+1229|NBA|Heat at Mavericks|8:00p · NBC|STAR||
+1229|NCAAF|Alamo Bowl|9:00p · ESPN · San Antonio|PRIME HOLIDAY TBD||
+1230|NCAAF|CFP Quarterfinal: Fiesta Bowl|7:30p · TNT|TENT ELIM PRIME TBD|Tentpole|
+1230|NCAAF|Gator Bowl|11:30a · ESPN · Jacksonville|HOLIDAY TBD||
+1230|NCAAF|Music City Bowl|3:00p · ESPN · Nashville|HOLIDAY TBD||
+1231|NHL|Winter Classic: Avalanche at Mammoth|6:00p (4:00p MT) · TNT · Rice-Eccles Stadium|NOVEL HOLIDAY|Tentpole|
+1231|NFL|TNF: Ravens at Bengals|8:15p · Prime|PRIME RIVAL HOLIDAY||
+1231|NBA|Nuggets at Timberwolves|4:00p · Prime|STAR HOLIDAY||
+1231|NCAAF|ReliaQuest Bowl|12:00p · ESPN · Tampa|HOLIDAY TBD||
+1231|NCAAF|Las Vegas Bowl|3:45p · ESPN · Allegiant Stadium|HOLIDAY TBD||
+0101|NCAAF|CFP Quarterfinal|12:00p · TNT|TENT ELIM HOLIDAY TBD|Tentpole|
+0101|NCAAF|CFP Quarterfinal|4:00p · ABC/ESPN|TENT ELIM HOLIDAY TBD|Tentpole|
+0101|NCAAF|CFP Quarterfinal|8:00p · ESPN|TENT ELIM PRIME TBD|Tentpole|
+0102|NFL|Week 17 Saturday game 1|4:30p · NBC|PRIME TBD||
+0102|NFL|Week 17 Saturday game 2|8:00p · Peacock|PRIME TBD||
+0102|NCAAF|Citrus Bowl|12:00p · ABC · Orlando|HOLIDAY TBD||
+0102|NCAAB|No. 5 Michigan State at No. 25 Nebraska|3:45p · CBS|TOP25||
+0103|NFL|SNF: Eagles at 49ers|8:20p · NBC|PRIME STAR||
+0103|NFL|Lions at Bears|4:25p · FOX|RIVAL BIGMKT||
+0103|NFL|Giants at Cowboys|1:00p · FOX|RIVAL BIGMKT||
+0104|NFL|MNF: Texans at Packers|8:15p · ESPN|PRIME||
+0105|NBA|Timberwolves at Rockets|8:00p · NBC|PRIME STAR||
+0105|NBA|Suns at Nuggets|10:00p · NBC|STAR||
+0105|NCAAB|No. 20 Michigan at No. 25 Nebraska|7:00p · Peacock|TOP25||
+0106|NBA|Knicks at Warriors|10:00p · ESPN|PRIME BIGMKT STAR||
+0106|NBA|Thunder at 76ers|7:30p · ESPN|STAR||
+0107|NBA|Celtics at Lakers|10:00p · Prime|BIGMKT RIVAL||
+0107|NHL|Blackhawks vs. Rangers|7:00p · ESPN|BIGMKT||
+0107|NHL|Wild vs. Golden Knights|9:30p · ESPN|STAR||
+0108|NBA|Heat at 76ers|7:00p · ESPN|STAR||
+0108|NBA|Suns at Mavericks|9:30p · ESPN|STAR||
+0109|NFL|Week 18 game|1:00p · Netflix|TENT ELIM NOVEL TBD|Tentpole|
+0109|NFL|Week 18 game|4:30p · ESPN/ABC|TENT ELIM TBD|Tentpole|
+0109|NFL|Week 18 game|8:00p · ESPN/ABC|TENT ELIM PRIME TBD|Tentpole|
+0109|NCAAB|No. 15 Kansas at No. 23 BYU|ESPN · time TBA|TOP25||
+0109|NCAAB|No. 5 Michigan State at No. 9 UCLA|8:00p · FOX|TOP25 PRIME||
+0110|NFL|Week 18 SNF (win-and-in game)|8:20p · NBC|ELIM PRIME TBD|Tentpole|
+0110|NFL|Steelers at Ravens|time TBD|RIVAL ELIM TBD|Tentpole|
+0110|NFL|Lions at Packers|time TBD|RIVAL ELIM TBD|Tentpole|
+0111|NBA|Nuggets at Knicks|7:30p · Peacock|BIGMKT STAR||
+0111|NBA|Lakers at Clippers|10:00p · Peacock|RIVAL BIGMKT STAR||
+0112|NCAAB|Marquette at No. 4 UConn|7:00p · TNT|TOP25||
+0112|NBA|Kings at Warriors|11:00p · NBC|STAR||
+0112|NCAAB|No. 5 Michigan State at No. 21 USC|10:00p · Peacock|TOP25||
+0113|NBA|Knicks at Celtics|7:00p · ESPN|PRIME RIVAL BIGMKT||
+0113|NBA|Rockets at Thunder|9:30p · ESPN|STAR||
+0113|NCAAB|Iowa State at No. 8 Houston|9:00p · Peacock|TOP25||
+0114|NCAAF|CFP Semifinal: Orange Bowl|7:30p · TNT|ELIM PRIME TBD|Tentpole|
+0114|NBA|Paris Game: Pelicans vs. Spurs (Wemby in France)|2:00p · Prime|NOVEL GLOBAL STAR||
+0114|NHL|Panthers vs. Wild|9:30p · ESPN|STAR||
+0115|NCAAF|CFP Semifinal: Sugar Bowl|7:30p · ABC/ESPN|ELIM PRIME TBD|Tentpole|
+0116|NFL|Wild Card|4:30p|TENT ELIM TBD|Tentpole|
+0116|NFL|Wild Card|8:00p|TENT ELIM PRIME TBD|Tentpole|
+0116|NHL|Bruins vs. Rangers (Original Six)|12:00p · ABC|RIVAL BIGMKT||
+0116|NCAAB|No. 1 Florida at No. 18 Alabama|Time/TV TBA|TOP25||
+0116|NCAAB|No. 6 Virginia at No. 17 Miami|6:00p · ESPN|TOP25||
+0117|NFL|Wild Card|1:00p|TENT ELIM TBD|Tentpole|
+0117|NFL|Wild Card|4:30p|TENT ELIM TBD|Tentpole|
+0117|NFL|Wild Card|8:15p · NBC|TENT ELIM PRIME TBD|Tentpole|
+0117|NBA|Manchester Game: Spurs vs. Pelicans|10:30a · Prime|NOVEL GLOBAL STAR||
+0117|NHL|Golden Knights at Hurricanes (Stanley Cup Final rematch)|6:00p|RIVAL||
+0118|NFL|Wild Card MNF|8:15p · ESPN/ABC|TENT ELIM PRIME HOLIDAY TBD|Tentpole|
+0118|NBA|MLK Day: Timberwolves at Knicks|5:00p · NBC|HOLIDAY BIGMKT|Tentpole|
+0118|NBA|MLK Day: Pistons at Cavaliers|12:00p · NBC|HOLIDAY RIVAL|Tentpole|
+0119|UCL|Inter vs. Liverpool|3:00p · Paramount+|GLOBAL STAR||
+0119|NBA|Jazz at Nuggets|10:00p · NBC|STAR||
+0119|NCAAB|No. 17 Miami at No. 10 Louisville|7:00p · ESPN|TOP25||
+0119|NCAAB|No. 25 Nebraska at No. 3 Illinois|9:00p · Peacock|TOP25||
+0120|NBA|Heat at Spurs|9:30p · ESPN|STAR||
+0121|NBA|76ers at Celtics|7:30p · Prime|RIVAL BIGMKT STAR||
+0121|NBA|Lakers at Warriors|10:00p · Prime|STAR BIGMKT||
+0121|NHL|Red Wings vs. Wild|9:00p · ESPN|STAR||
+0122|NBA|Timberwolves at Spurs|9:30p · ESPN|STAR||
+0122|NBA|Knicks at Hawks|7:00p · ESPN|BIGMKT||
+0122|NCAAB|No. 9 UCLA at No. 25 Nebraska|Time/TV TBA|TOP25||
+0123|NFL|Divisional|4:30p|ELIM TBD|Tentpole|
+0123|NFL|Divisional|8:15p|ELIM PRIME TBD|Tentpole|
+0123|NCAAB|No. 20 Michigan at No. 21 USC|3:00p · NBC|TOP25||
+0123|NCAAB|No. 11 Tennessee at No. 24 Kentucky|2:00p · ESPN|TOP25 RIVAL||
+0124|NFL|Divisional|3:00p|ELIM TBD|Tentpole|
+0124|NFL|Divisional|6:30p|ELIM PRIME TBD|Tentpole|
+0124|NBA|Thunder at Warriors|8:30p · NBC|STAR||
+0125|NCAAF|CFP National Championship|7:30p · ABC/ESPN · Allegiant Stadium|TENT PRIME TBD|Tentpole|
+0126|NBA|Rivals Week: Thunder at Lakers|11:00p · NBC|RIVAL STAR BIGMKT||
+0126|NBA|Rivals Week: Rockets at Spurs|8:00p · NBC|RIVAL STAR||
+0126|TENNIS|Australian Open night session: Quarterfinals|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM||
+0127|NBA|Rivals Week: Nuggets at Timberwolves|9:30p · ESPN|RIVAL STAR||
+0127|NBA|Rivals Week: Pistons at Cavaliers|7:00p · ESPN|RIVAL||
+0127|TENNIS|Australian Open night session: Quarterfinals|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM||
+0128|NBA|Rivals Week: Heat at Bucks|9:30p · Prime|RIVAL STAR||
+0128|NBA|Hawks at Knicks|7:00p · Prime|BIGMKT||
+0128|TENNIS|Australian Open: Women's semifinals|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM||
+0129|NBA|Cavaliers at Raptors|7:00p · ESPN|GLOBAL||
+0129|NCAAB|No. 4 UConn at No. 13 St. John's|Madison Square Garden · time/TV TBA|TOP25 RIVAL BIGMKT||
+0129|TENNIS|Australian Open: Men's semifinals|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM|Tentpole|
+0130|NBA|Lakers at Knicks (Lakers' only MSG visit)|8:30p · ABC|PRIME BIGMKT STAR||
+0130|NBA|Spurs at Warriors|5:30p · ABC|STAR||
+0130|UFC|UFC 336: Van vs. Kape (flyweight title)|Paramount+ · Toronto|STAR GLOBAL||
+0130|TENNIS|Australian Open: Women's final|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM|Tentpole|
+0131|NFL|NFC Championship|3:00p · FOX|TENT ELIM|Tentpole|
+0131|NFL|AFC Championship|6:30p · CBS|TENT ELIM PRIME|Tentpole|
+0131|TENNIS|Australian Open: Men's final|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM|Tentpole|
+0131|NHL|Flyers vs. Penguins|12:00p · ABC|RIVAL||
+0201|NBA|Spurs at Warriors|10:00p · Peacock|STAR||
+0201|NCAAB|No. 17 Miami at No. 2 Duke|7:00p · ESPN|TOP25||
+0201|NCAAB|No. 15 Kansas at No. 8 Houston|9:00p · ESPN|TOP25||
+0202|NBA|Lakers at Celtics|8:00p · NBC|PRIME RIVAL BIGMKT STAR||
+0202|NCAAB|No. 9 UCLA at No. 3 Illinois|9:00p · Peacock|TOP25||
+0202|NCAAB|No. 13 St. John's at Marquette|7:30p · TNT|TOP25 BIGMKT||
+0203|NBA|Pioneers Classic: Knicks at Pistons|7:00p · ESPN|BIGMKT NOVEL||
+0203|NBA|Jazz at Rockets|9:30p · ESPN|STAR||
+0204|NBA|Mavericks at Nuggets|10:00p · Prime|STAR||
+0205|NBA|Pacers at Thunder (2025 Finals rematch)|9:30p · Prime|RIVAL STAR||
+0205|NCAAB|No. 5 Michigan State at No. 3 Illinois|8:00p · FOX|TOP25 PRIME||
+0205|NHL|All-Star Skills Competition|7:00p · ESPN · UBS Arena|NOVEL STAR||
+0206|NBA|Lakers at Spurs|8:30p · ABC|PRIME STAR BIGMKT||
+0206|NBA|Trail Blazers at Grizzlies (Ja Morant's return)|5:30p · Prime|STAR||
+0206|NHL|All-Star Game|3:00p · ABC · UBS Arena|TENT NOVEL STAR|Tentpole|
+0206|NCAAB|No. 16 Texas Tech at No. 15 Kansas|12:00p · ABC|TOP25||
+0206|NCAAB|No. 2 Duke at No. 6 Virginia|6:00p · ESPN|TOP25||
+0207|NBA|Celtics at 76ers|7:00p · NBC|PRIME RIVAL BIGMKT||
+0207|NBA|Knicks at Thunder|9:30p · NBC|STAR BIGMKT||
+0208|NBA|Lakers at Suns|9:30p · Peacock|STAR BIGMKT||
+0208|NCAAB|No. 10 Louisville at UNC|7:00p · ESPN|TOP25||
+0208|NBA|Heat at Hawks|7:00p · Peacock|STAR||
+0209|NBA|Rockets at Jazz|10:00p · NBC|PRIME||
+0209|NBA|Spurs at Mavericks|8:00p · NBC|STAR||
+0209|NCAAB|No. 3 Illinois at No. 20 Michigan|7:00p · Peacock|TOP25||
+0210|NBA|Clippers at Lakers|10:00p · ESPN|RIVAL BIGMKT||
+0210|NBA|Warriors at Celtics|7:30p · ESPN|RIVAL STAR BIGMKT||
+0211|NFL|NFL Honors|Evening · time TBA|AWARD STAR|Tentpole|
+0211|NBA|Spurs at Thunder|9:30p · Prime|RIVAL STAR||
+0211|NBA|Knicks at 76ers|7:00p · Prime|RIVAL BIGMKT||
+0212|NBA|Nuggets at Lakers|10:30p · ESPN|STAR BIGMKT||
+0212|NBA|Timberwolves at Celtics|8:00p · Prime|STAR BIGMKT||
+0213|NBA|Warriors at Knicks|8:30p · ABC|STAR BIGMKT PRIME||
+0213|NBA|76ers at Thunder|5:30p · Prime|STAR||
+0213|NCAAB|No. 5 Michigan State at No. 20 Michigan|1:00p · CBS|RIVAL TOP25||
+0213|NCAAB|North Carolina at No. 2 Duke|5:30p · ABC|RIVAL TOP25||
+0214|NFL|Super Bowl LXI|6:30p · ESPN/ABC · SoFi Stadium|PRIME TENT STAR HOLIDAY|Finale|
 `;
 
 const SEASON_DAYS = 76;
@@ -438,6 +456,8 @@ const TAGS = {
 // Live link to the "Jumbo Season 1 MASTER Calendar" Google Sheet (first tab).
 // The sheet must be shared as "Anyone with the link: Viewer".
 // A "Publish to web" CSV link also works here. Leave empty to use the saved copy above.
+// Show the sheet's Budget column on each event (true/false). The hosted page is public.
+const SHOW_BUDGET = true;
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1UuMb5HDfEZeEcuN2Zhfq0kYQ9GO451GsEo077FHSF5E/gviz/tq?tqx=out:csv&gid=0&headers=1";
 
 const SPORT_CODES = {
@@ -486,7 +506,7 @@ async function loadSheet(){
     const rows=parseCSV(await res.text());
     const head=rows.shift().map(h=>h.trim().toLowerCase());
     const col=name=>head.findIndex(h=>h.startsWith(name));
-    const ci={day:col("day"),date:col("date"),sport:col("sport"),event:col("event"),time:col("time"),tent:col("tentpole")};
+    const ci={day:col("day"),date:col("date"),week:col("week"),sport:col("sport"),event:col("event"),time:col("time"),tent:col("tentpole"),anchor:col("anchor"),budget:col("budget")};
     const tagCols=head.map((h,i)=>/^tag/.test(h)?i:-1).filter(i=>i>=0);
     const lines=[], tp={};
     rows.forEach(r=>{
@@ -496,17 +516,27 @@ async function loadSheet(){
       if(!k||!sp||!title) return;
       const tags=tagCols.flatMap(i=>(r[i]||"").split(/[,\s]+/)).map(t=>t.trim().toUpperCase()).filter(Boolean);
       const clean=v=>(v||"").replace(/\|/g,"/").replace(/\s+/g," ").trim();
-      lines.push([k,sp,clean(title),clean(r[ci.time]),[...new Set(tags)].join(" ")].join("|"));
-      const t=ci.tent>=0?(r[ci.tent]||"").trim():"";
-      const m=t.match(/^wk\s*(\d+)\s*[:\-–]\s*(.+)$/i);
-      if(m && tags.includes("TENT")){ const wk=+m[1]; (tp[wk] ||= {wk,name:m[2].trim(),days:new Set()}).days.add(k); }
+      const anchor=ci.anchor>=0?clean(r[ci.anchor]):"";
+      const budget=ci.budget>=0?clean(r[ci.budget]):"";
+      lines.push([k,sp,clean(title),clean(r[ci.time]),[...new Set(tags)].join(" "),anchor,budget].join("|"));
+      if(tags.includes("TENT")){
+        const t=ci.tent>=0?(r[ci.tent]||"").trim():"";
+        const m=t.match(/^wk\s*(\d+)\s*[:\-–]\s*(.+)$/i);
+        const d=new Date(Date.UTC(k.startsWith("12")?2026:2027,+k.slice(0,2)-1,+k.slice(2)));
+        const wk=m?+m[1]:(parseInt(r[ci.week],10)||Math.floor((Math.round((d-Date.UTC(2026,11,1))/86400000))/7)+1);
+        const w=(tp[wk] ||= {wk,name:m?m[2].trim():"",days:new Set(),titles:[],anchor:""});
+        w.days.add(k); w.titles.push(clean(title)); if(anchor&&anchor!=="Tentpole") w.anchor=anchor;
+      }
     });
     if(!lines.length) throw new Error("no rows");
     DATA=lines.join("\n");
     const old={}; TP_WEEKS.forEach(w=>old[w.wk]=w);
     const weeks=Object.values(tp).sort((a,b)=>a.wk-b.wk).map(w=>{
       const days=[...w.days].sort((a,b)=>(a<"06"?"1"+a:"0"+a)<(b<"06"?"1"+b:"0"+b)?-1:1);
-      return {wk:w.wk, days, label:rangeLabel(days), name:w.name, why:(old[w.wk]&&old[w.wk].name===w.name)?old[w.wk].why:""};
+      const prev=old[w.wk];
+      const sameDays=prev&&prev.days.join()===days.join();
+      const name=w.name||(sameDays?prev.name:[...new Set(w.titles)].slice(0,2).join(" + "));
+      return {wk:w.wk, days, label:rangeLabel(days), name, why:(sameDays&&prev.name===name)?prev.why:"", anchor:w.anchor};
     });
     if(weeks.length) TP_WEEKS=weeks;
     src.textContent="Live from the team sheet.";
@@ -520,13 +550,25 @@ function boot(){
 const TENTPOLES = {};
 TP_WEEKS.forEach(w=>w.days.forEach(d=>TENTPOLES[d]=w));
 
+const fmtBudget = b => {
+  if(!b) return "";
+  const n = Number(String(b).replace(/[$,\s]/g,""));
+  if(b.match(/^\$?\s*-?[\d,]+(\.\d+)?$/) && isFinite(n)) return n.toLocaleString("en-US",{style:"currency",currency:"USD",maximumFractionDigits:n%1?2:0});
+  return b;
+};
+
 // parse
 const byDay = {};
 DATA.trim().split("\n").forEach(line=>{
-  const [k,s,t,tm,tg] = line.split("|");
-  (byDay[k] ||= []).push({s, t, tm: tm||"", tags: (tg||"").trim().split(/\s+/).filter(Boolean)});
+  const [k,s,t,tm,tg,an,bu] = line.split("|");
+  (byDay[k] ||= []).push({s, t, tm: tm||"", tags: (tg||"").trim().split(/\s+/).filter(Boolean), anchor:(an||"").trim(), budget:(bu||"").trim()});
 });
-Object.values(byDay).forEach(list=>list.forEach((e,i)=>e.slot=i+1));
+// TENT events float to the top of their day (stable: the rest keep the sheet's order)
+Object.keys(byDay).forEach(k=>{
+  const list=byDay[k];
+  byDay[k]=[...list.filter(e=>e.tags.includes("TENT")),...list.filter(e=>!e.tags.includes("TENT"))];
+  byDay[k].forEach((e,i)=>e.slot=i+1);
+});
 
 const START = Date.UTC(2026,11,1);
 const DAY = 86400000;
@@ -577,7 +619,7 @@ function renderFilters(){
 const strip = document.getElementById("strip");
 TP_WEEKS.forEach(w=>{
   const d = dateOfKey(w.days[0]);
-  const b = el("button","tp",`<span class="wk">Week ${w.wk}${w.wk===11?" · Final":""}</span><span class="nm">${esc(w.name)}</span><span class="dt">${esc(w.label)}</span>`);
+  const b = el("button","tp",`<span class="wk">Week ${w.wk}${w.anchor?" · "+esc(w.anchor):(w.wk===TP_WEEKS[TP_WEEKS.length-1].wk?" · Final":"")}</span><span class="nm">${esc(w.name)}</span><span class="dt">${esc(w.label)}</span>`);
   b.type="button"; b.onclick=()=>openDay(d);
   strip.append(b);
 });
@@ -610,8 +652,8 @@ function renderMonths(){
         const list = el("div","evs");
         const shown = evs.filter(visible);
         shown.forEach(e=>{
-          const c = el("div",`ev sp-${e.s}${e.tags.includes("TENT")?" tentev":""}`,`<span class="sp">${e.s}</span><span class="ti">${esc(e.t)}</span>${e.tm?`<span class="tm">${esc(e.tm.split(" · ")[0])}</span>`:""}`);
-          c.title = `${e.s} · ${e.t}${e.tm?" · "+e.tm:""}`;
+          const c = el("div",`ev sp-${e.s}${e.tags.includes("TENT")?" tentev":""}`,`<span class="sp">${e.s}</span><span class="ti">${e.anchor?`<b class="star" title="${esc(e.anchor)}">★</b> `:""}${esc(e.t)}</span>${e.tm?`<span class="tm">${esc(e.tm.split(" · ")[0])}</span>`:""}`);
+          c.title = `${e.anchor?"★ "+e.anchor+" · ":""}${e.s} · ${e.t}${e.tm?" · "+e.tm:""}`;
           list.append(c);
         });
         cell.append(list);
@@ -641,8 +683,8 @@ function openDay(d){
   if(tp) b.append(el("div","banner",`<div class="k">★ Week ${tp.wk} tentpole · ${esc(tp.label)}</div><p>${esc(tp.name)}</p><div class="sb">${esc(tp.why)}</div>`));
   if(!evs.length) b.append(el("p","empty","No featured events."));
   evs.forEach(e=>{
-    const c=el("div",`dev sp-${e.s}`);
-    c.innerHTML=`<div class="top"><span class="sp">${e.s}</span><span class="slot">Event ${e.slot} of ${evs.length}</span></div><h5>${esc(e.t)}</h5>${e.tm?`<div class="tm">${esc(e.tm)}</div>`:""}${e.tags.length?`<div class="tags">${e.tags.map(t=>`<span class="tag t-${t}" title="${esc(TAGS[t]||t)}">${t}</span>`).join("")}</div>`:""}`;
+    const c=el("div",`dev sp-${e.s}${e.tags.includes("TENT")?" tentdev":""}`);
+    c.innerHTML=`<div class="top"><span class="sp">${e.s}</span><span class="slot">${e.anchor?`<span class="anc">★ ${esc(e.anchor)}</span> `:""}Event ${e.slot} of ${evs.length}</span></div><h5>${esc(e.t)}</h5>${e.tm?`<div class="tm">${esc(e.tm)}</div>`:""}${SHOW_BUDGET&&e.budget?`<div class="bud"><span>Budget</span> ${esc(fmtBudget(e.budget))}</div>`:""}${e.tags.length?`<div class="tags">${e.tags.map(t=>`<span class="tag t-${t}" title="${esc(TAGS[t]||t)}">${t}</span>`).join("")}</div>`:""}`;
     if(!visible(e)) c.style.opacity=".55";
     b.append(c);
   });
