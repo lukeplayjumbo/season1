@@ -91,6 +91,9 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(34px,5vw,56px);l
 .ev .sp{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.06em;color:var(--c);font-weight:500}
 .ev .ti{font-size:12px;line-height:1.25;font-weight:500;overflow-wrap:anywhere}
 .ev .tm{font-family:var(--f-mono);font-size:10px;color:var(--muted)}
+.ev .evf{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.ev .evb{margin-left:auto;text-align:right;min-width:0;overflow-wrap:anywhere}
+.ev .evf .tm:first-child{white-space:nowrap}
 .ev .star{color:var(--gold);font-weight:700}
 /* reflective gold tiles for TENT events */
 :root{--gold-metal:linear-gradient(135deg,#bfa060 0%,#dcc68c 16%,#f6ecce 32%,#e7d5a0 46%,#d2b77a 62%,#eedfb2 78%,#dbc48c 90%,#c2a466 100%);--gold-ink:#3a2a08}
@@ -652,7 +655,7 @@ function renderMonths(){
         const list = el("div","evs");
         const shown = evs.filter(visible);
         shown.forEach(e=>{
-          const c = el("div",`ev sp-${e.s}${e.tags.includes("TENT")?" tentev":""}`,`<span class="sp">${e.s}</span><span class="ti">${e.anchor?`<b class="star" title="${esc(e.anchor)}">★</b> `:""}${esc(e.t)}</span>${e.tm?`<span class="tm">${esc(e.tm.split(" · ")[0])}</span>`:""}`);
+          const c = el("div",`ev sp-${e.s}${e.tags.includes("TENT")?" tentev":""}`,`<span class="sp">${e.s}</span><span class="ti">${e.anchor?`<b class="star" title="${esc(e.anchor)}">★</b> `:""}${esc(e.t)}</span>${(e.tm||(SHOW_BUDGET&&e.budget))?`<span class="evf"><span class="tm">${esc((e.tm||"").split(" · ")[0])}</span>${SHOW_BUDGET&&e.budget?`<span class="tm evb">${esc(fmtBudget(e.budget))}</span>`:""}</span>`:""}`);
           c.title = `${e.anchor?"★ "+e.anchor+" · ":""}${e.s} · ${e.t}${e.tm?" · "+e.tm:""}`;
           list.append(c);
         });
