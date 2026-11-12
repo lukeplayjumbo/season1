@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jumbo Season 1 Calendar</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: broadcast "rundown board" — header + tentpole strip, three month grids, day drawer on tap */
+:root{
+  --bg:#F3F5F8; --surface:#FFFFFF; --ink:#131A2A; --muted:#5B6476; --line:#DDE2EA; --out:#ECEFF4;
+  --accent:#2442D6; --gold:#C98F00; --gold-soft:#FFF3CC; --scrim:rgba(19,26,42,.38);
+  --nfl:#1E7A46; --nba:#C94F00; --ncaaf:#9B1C31; --ncaab:#0F7C86; --nhl:#2F6FB5; --ucl:#4B2BA8; --ufc:#C0262D; --tennis:#5E7B00; --jumbo:#2442D6;
+  --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D1120; --surface:#161B2C; --ink:#E8ECF5; --muted:#9AA3B8; --line:#283049; --out:#11152490;
+  --accent:#8297FF; --gold:#F2C14B; --gold-soft:#3A2F12; --scrim:rgba(0,0,0,.55);
+  --nfl:#4CC27E; --nba:#FF8A3D; --ncaaf:#F06A80; --ncaab:#3CC6D2; --nhl:#6FA8EE; --ucl:#A28EF7; --ufc:#FF6B6B; --tennis:#B5D334; --jumbo:#8297FF;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1120; --surface:#161B2C; --ink:#E8ECF5; --muted:#9AA3B8; --line:#283049; --out:#11152490;
+  --accent:#8297FF; --gold:#F2C14B; --gold-soft:#3A2F12; --scrim:rgba(0,0,0,.55);
+  --nfl:#4CC27E; --nba:#FF8A3D; --ncaaf:#F06A80; --ncaab:#3CC6D2; --nhl:#6FA8EE; --ucl:#A28EF7; --ufc:#FF6B6B; --tennis:#B5D334; --jumbo:#8297FF;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.45}
+.wrap{max-width:1480px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:28px}
+
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 32px}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(34px,5vw,56px);line-height:.95;margin:6px 0 8px;letter-spacing:.005em;text-wrap:balance}
+.sub{color:var(--muted);margin:0;max-width:62ch}
+.stats{display:flex;gap:24px;flex-wrap:wrap}
+.stat{display:flex;flex-direction:column}
+.stat b{font-family:var(--f-display);font-size:34px;line-height:1;font-variant-numeric:tabular-nums}
+.stat span{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+/* filters */
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filters .lbl{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.fchip{--c:var(--muted);display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px 6px 10px;font:600 12.5px var(--f-body);cursor:pointer}
+.fchip i{width:9px;height:9px;border-radius:50%;background:var(--c)}
+.fchip small{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.fchip[aria-pressed="false"]{opacity:.42}
+.fchip[aria-pressed="false"] i{background:transparent;box-shadow:inset 0 0 0 1.5px var(--c)}
+.fchip:focus-visible,.cell:focus-visible,.tp:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sep{width:1px;height:22px;background:var(--line);margin:0 6px}
+.toggle{border-color:var(--gold)}
+.toggle[aria-pressed="true"]{background:var(--gold-soft);opacity:1}
+.toggle[aria-pressed="false"]{opacity:1}
+.reset{border:0;background:none;color:var(--accent);font:600 12.5px var(--f-body);cursor:pointer;padding:6px 4px}
+
+/* tentpole strip */
+.section-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.section-h h2{font-family:var(--f-display);font-weight:700;font-size:24px;margin:0;letter-spacing:.01em}
+.section-h p{margin:0;color:var(--muted);font-size:12.5px}
+.strip{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(168px,1fr);gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+.tp{text-align:left;border:1px solid var(--line);border-top:3px solid var(--gold);background:var(--surface);color:var(--ink);border-radius:6px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:4px;font:inherit}
+.tp:hover{background:var(--gold-soft)}
+.tp .wk{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.tp .nm{font-weight:600;font-size:13px;line-height:1.3}
+.tp .dt{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+
+/* months */
+.months{display:flex;flex-direction:column;gap:36px}
+.month-h{display:flex;align-items:baseline;gap:14px;margin-bottom:10px;flex-wrap:wrap}
+.month-h h3{font-family:var(--f-display);font-weight:700;font-size:32px;margin:0;line-height:1}
+.month-h span{font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:.06em}
+.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.dow{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface)}
+.cell{position:relative;min-width:0;min-height:112px;border:0;border-radius:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface);padding:6px 6px 8px;display:flex;flex-direction:column;gap:5px;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.cell:hover{background:color-mix(in srgb,var(--accent) 5%,var(--surface))}
+.cell.out{background:var(--out);cursor:default}
+.cell.out:hover{background:var(--out)}
+.cell.blank{background:var(--out);cursor:default}
+.cell.tent{box-shadow:inset 0 0 0 2px var(--gold);background:color-mix(in srgb,var(--gold-soft) 70%,var(--surface))}
+.cell.dim .ev{display:none}
+.cell.dim .nomatch{display:block}
+.nomatch{display:none;font-size:11px;color:var(--muted)}
+.dhead{display:flex;align-items:baseline;justify-content:space-between;gap:6px}
+.dnum{font-family:var(--f-display);font-weight:700;font-size:20px;line-height:1;font-variant-numeric:tabular-nums}
+.cell.out .dnum{color:var(--muted);opacity:.6}
+.dday{font-family:var(--f-mono);font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tflag{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);font-weight:500}
+.ev{--c:var(--muted);display:flex;flex-direction:column;gap:1px;border-left:3px solid var(--c);background:color-mix(in srgb,var(--c) 11%,var(--surface));border-radius:0 4px 4px 0;padding:3px 6px 4px;min-width:0}
+.ev .sp{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.06em;color:var(--c);font-weight:500}
+.ev .ti{font-size:12px;line-height:1.25;font-weight:500;overflow-wrap:anywhere}
+.ev .tm{font-family:var(--f-mono);font-size:10px;color:var(--muted)}
+.ev.tentev{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--gold) 55%,transparent)}
+.sb{font-size:11px;color:var(--muted);line-height:1.3}
+.sb b{font-family:var(--f-display);font-size:15px;color:var(--ink);display:block}
+
+/* tag key */
+.key{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px 24px}
+.key div{display:flex;gap:10px;align-items:baseline}
+.tag{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.04em;padding:2px 6px;border-radius:3px;border:1px solid var(--line);background:var(--bg);color:var(--ink);white-space:nowrap}
+.tag.t-TENT{border-color:var(--gold);background:var(--gold-soft)}
+.key p{margin:0;color:var(--muted);font-size:12.5px}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:20}
+.drawer{position:fixed;z-index:21;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--surface);border-left:1px solid var(--line);box-shadow:-12px 0 40px rgba(0,0,0,.18);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);padding-right:env(safe-area-inset-right,0px)}
+.dr-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px 20px 14px;border-bottom:1px solid var(--line)}
+.dr-h .k{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.dr-h h4{font-family:var(--f-display);font-size:30px;margin:2px 0 0;line-height:1}
+.close{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:6px;width:34px;height:34px;font-size:18px;cursor:pointer;flex:none}
+.dr-b{overflow-y:auto;padding:16px 20px 24px;display:flex;flex-direction:column;gap:12px}
+.banner{border:1px solid var(--gold);background:var(--gold-soft);border-radius:6px;padding:10px 12px}
+.banner .k{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.banner p{margin:2px 0 0;font-weight:600}
+.dev{--c:var(--muted);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:0 6px 6px 0;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.dev .top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.dev .sp{font-family:var(--f-mono);font-size:11px;font-weight:500;color:var(--c);letter-spacing:.06em}
+.dev .slot{font-family:var(--f-mono);font-size:10.5px;color:var(--muted)}
+.dev h5{margin:0;font-size:15px;font-weight:600;line-height:1.3}
+.dev .tm{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.empty{color:var(--muted)}
+
+.sp-NFL{--c:var(--nfl)}.sp-NBA{--c:var(--nba)}.sp-NCAAF{--c:var(--ncaaf)}.sp-NCAAB{--c:var(--ncaab)}.sp-NHL{--c:var(--nhl)}.sp-UCL{--c:var(--ucl)}.sp-UFC{--c:var(--ufc)}.sp-TENNIS{--c:var(--tennis)}.sp-JUMBO{--c:var(--jumbo)}
+
+@media (max-width:820px){
+  .cell{min-height:64px;padding:4px 4px 6px;gap:3px}
+  .dnum{font-size:16px}
+  .dday,.tflag{display:none}
+  .evs{display:flex;flex-wrap:wrap;gap:3px}
+  .ev{width:100%;height:5px;padding:0;border-left:0;background:var(--c);border-radius:2px}
+  .ev .sp,.ev .ti,.ev .tm{display:none}
+  .cell.tent .dhead::after{content:"★";color:var(--gold);font-size:12px}
+  .sb{display:none}
+  .drawer{top:auto;width:100%;max-height:82vh;border-left:0;border-top:1px solid var(--line);border-radius:12px 12px 0 0;padding-left:env(safe-area-inset-left,0px)}
+}
+@media (prefers-reduced-motion:no-preference){
+  .drawer{animation:slide .18s ease-out}
+  @keyframes slide{from{transform:translateX(24px);opacity:.6}to{transform:none;opacity:1}}
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">Jumbo · Season 1 programming</div>
+      <h1>Season 1 Calendar</h1>
+      <p class="sub">76 days of featured in-app events, Tue Dec 1, 2026 through Super Bowl Sunday, Feb 14, 2027. Gold days are the weekly tentpoles. All times ET; college hoops ranks are the AP Top 25 as of Nov 9. Tap any day for times, networks and tags. <span id="src"></span></p>
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <div class="filters" id="filters" role="group" aria-label="Filter events"></div>
+
+  <section aria-labelledby="tp-h">
+    <div class="section-h"><h2 id="tp-h">Weekly tentpoles</h2><p>One per 7-day season week</p></div>
+    <div class="strip" id="strip"></div>
+  </section>
+
+  <div class="months" id="months"></div>
+
+  <section aria-labelledby="key-h">
+    <div class="section-h"><h2 id="key-h">Why tags</h2><p>Why each event earned its slot</p></div>
+    <div class="key" id="key"></div>
+  </section>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-labelledby="dr-title">
+  <div class="dr-h">
+    <div><div class="k" id="dr-k"></div><h4 id="dr-title"></h4></div>
+    <button class="close" id="dr-close" aria-label="Close day details">×</button>
+  </div>
+  <div class="dr-b" id="dr-b"></div>
+</aside>
+
+<script>
+let DATA = `
+1201|NBA|Knicks at Bulls|8:00p · NBC|PRIME BIGMKT
+1201|NBA|Jazz at Warriors|11:00p · NBC|PRIME STAR
+1201|NCAAB|SEC/ACC Challenge: No. 2 Duke at No. 1 Florida|9:30p · ESPN|TOP25 RIVAL PRIME
+1201|NCAAB|SEC/ACC Challenge: No. 19 Arkansas at UNC (7:30p ESPN) + No. 7 Texas at No. 10 Louisville (9:00p ESPN2)|7:30p & 9:00p · ESPN/ESPN2|TOP25
+1202|NCAAB|SEC/ACC Challenge: No. 24 Kentucky at No. 6 Virginia + No. 22 Vanderbilt at Notre Dame|7:15p · ESPN/ACCN|TOP25
+1202|NCAAB|SEC/ACC Challenge: No. 18 Alabama at No. 17 Miami|9:15p · ESPN|TOP25
+1203|NFL|TNF: Chiefs at Rams|8:15p · Prime|PRIME STAR BIGMKT
+1204|NCAAF|Big 12 Championship|8:00p · ABC · AT&T Stadium|TENT PRIME
+1204|NCAAF|Pac-12 Championship|8:00p · CBS/Paramount+ · campus site|TENT
+1204|NBA|NBA Cup Quarterfinals|Prime|ELIM TBD
+1205|NCAAF|SEC Championship|4:00p · ABC · Atlanta|TENT
+1205|NCAAF|Big Ten Championship|8:00p · FOX · Indianapolis|TENT PRIME
+1205|NCAAF|ACC Championship|12:00p · ABC · Charlotte|TENT
+1205|NCAAB|No. 10 Louisville at No. 20 Michigan|12:00p · Peacock|TOP25
+1205|NBA|NBA Cup Quarterfinals (night 2)|Prime|ELIM TBD
+1206|NCAAF|CFP Selection Sunday: 12-team bracket reveal|ESPN · time TBA|TENT
+1206|NFL|SNF: Texans at Steelers|8:20p · NBC|PRIME
+1206|NFL|Bills at Patriots|4:25p · CBS|RIVAL STAR
+1207|NFL|MNF: Cowboys at Seahawks|8:15p · ESPN|PRIME BIGMKT
+1208|UCL|Barcelona vs. Man City|3:00p · Paramount+|GLOBAL STAR
+1208|NCAAB|Jimmy V Classic: Georgia vs. No. 2 Duke|9:00p · ESPN · MSG|TOP25 BIGMKT
+1208|NCAAB|Jimmy V Classic: No. 18 Alabama vs. No. 8 Houston|6:30p · ESPN · MSG|TOP25
+1208|NBA|NBA Cup Semifinal(s)|Prime|ELIM TBD
+1209|UCL|Arsenal vs. Real Madrid|3:00p · Paramount+|GLOBAL STAR
+1209|NBA|NBA Cup Semifinal (if Wed)|Prime|ELIM TBD
+1210|NFL|TNF: Vikings at Patriots|8:15p · Prime|PRIME
+1210|NHL|Penguins vs. Panthers|7:00p · ESPN|STAR
+1210|NHL|Capitals vs. Kraken|9:30p · ESPN|STAR
+1211|NBA|NBA Cup Championship|Prime · Hinkle Fieldhouse|ELIM
+1212|NCAAF|Heisman Trophy Ceremony|Evening · time TBA|TENT AWARD
+1212|NCAAF|Army vs. Navy|3:00p · CBS · MetLife Stadium|RIVAL
+1212|NCAAB|No. 10 Louisville at No. 24 Kentucky|4:00p · ABC|TOP25 RIVAL
+1212|NBA|Knicks at Heat|8:30p · ABC|PRIME BIGMKT STAR
+1212|UFC|UFC 335: Oliveira vs. Lopes (BMF title)|Paramount+ · T-Mobile Arena, Las Vegas|STAR
+1213|NFL|SNF: Bills at Packers|8:20p · NBC|PRIME STAR
+1213|NFL|Rams at 49ers|4:25p · FOX|RIVAL BIGMKT
+1213|NFL|Chiefs at Bengals|4:25p · FOX|STAR
+1214|NFL|MNF: Steelers at Jaguars|8:15p · ESPN|PRIME
+1214|NBA|76ers at Magic|7:00p · Peacock|STAR
+1215|NBA|Spurs at Cavaliers|8:00p · NBC|PRIME STAR
+1215|NBA|Nuggets at Trail Blazers|11:00p · NBC|STAR
+1216|NBA|Lakers at Timberwolves|9:30p · ESPN|PRIME STAR BIGMKT
+1217|NFL|TNF: 49ers at Chargers|8:15p · Prime|PRIME BIGMKT
+1218|NCAAF|CFP First Round|8:00p · ESPN|TENT ELIM TBD
+1218|NBA|Clippers at Heat|7:00p · Prime|PRIME BIGMKT
+1219|NCAAF|CFP First Round tripleheader|12:00p ABC · 3:30p & 7:30p TNT|TENT ELIM TBD
+1219|NFL|Seahawks at Eagles + Bears at Bills|5:00p FOX · 8:20p CBS|PRIME STAR
+1219|NCAAB|CBS Sports Classic: UNC vs. No. 24 Kentucky|2:30p · CBS · MSG|TOP25 RIVAL BIGMKT
+1219|NCAAB|CBS Sports Classic: No. 15 Kansas vs. Ohio State|12:00p · CBS · MSG|TOP25
+1220|NFL|SNF: Lions at Vikings|8:20p · NBC|PRIME RIVAL
+1220|NFL|Cowboys at Rams|4:25p · CBS|BIGMKT
+1220|NFL|Ravens at Steelers|1:00p · CBS|RIVAL
+1221|NFL|MNF: Patriots at Chiefs|8:15p · ESPN|PRIME STAR
+1221|NBA|Knicks at Cavaliers (2026 East Finals rematch)|7:00p · Peacock|RIVAL BIGMKT
+1221|NHL|Hurricanes at Golden Knights (Stanley Cup Final rematch)|10:00p · T-Mobile Arena|RIVAL
+1222|NBA|Pistons at Thunder|8:00p · NBC|PRIME STAR
+1222|NBA|Mavericks at Warriors|10:30p · NBC|STAR BIGMKT
+1223|NBA|Rockets at 76ers|7:30p · Prime|STAR
+1223|NBA|Nuggets at Lakers|10:00p · Prime|STAR BIGMKT
+1224|NFL|TNF: Texans at Eagles|8:15p · Prime|PRIME HOLIDAY
+1224|NCAAF|Hawai'i Bowl|7:00p · ESPN · Honolulu|HOLIDAY TBD
+1225|NBA|Spurs at Knicks (2026 Finals rematch)|12:00p · ABC/ESPN|TENT HOLIDAY RIVAL BIGMKT
+1225|NBA|Heat at Celtics|2:30p · ABC/ESPN|TENT HOLIDAY STAR BIGMKT
+1225|NBA|76ers at Lakers (LeBron's return to LA)|5:00p · ABC/ESPN|TENT HOLIDAY STAR BIGMKT
+1225|NBA|Thunder at Timberwolves|8:00p · ABC/ESPN|TENT HOLIDAY STAR
+1225|NBA|Nuggets at Warriors|10:30p · ABC/ESPN|TENT HOLIDAY STAR
+1225|NFL|Packers at Bears|1:00p · Netflix|TENT HOLIDAY RIVAL NOVEL
+1225|NFL|Bills at Broncos|4:30p · Netflix|TENT HOLIDAY STAR NOVEL
+1225|NFL|Rams at Seahawks|8:15p · FOX|TENT HOLIDAY RIVAL PRIME
+1226|NFL|Saturday game 1|4:30p · NFL Network|PRIME TBD
+1226|NFL|Saturday game 2|8:00p · NFL Network|PRIME TBD
+1226|NCAAF|Pinstripe Bowl|12:00p · ABC · Yankee Stadium|BIGMKT HOLIDAY TBD
+1227|NFL|49ers at Chiefs|4:25p · CBS|STAR
+1227|NFL|SNF: Jaguars at Cowboys|8:20p · NBC|PRIME BIGMKT
+1227|NFL|Patriots at Jets|1:00p · CBS|RIVAL BIGMKT
+1228|NFL|MNF: Giants at Lions|8:15p · ESPN|PRIME BIGMKT
+1228|NBA|Cavaliers at Celtics|8:00p · NBC|BIGMKT
+1228|NBA|Timberwolves at Nuggets|10:30p · NBC|STAR
+1228|NCAAF|Holiday Bowl|5:00p · The CW · San Diego|HOLIDAY TBD
+1229|NBA|Rockets at Lakers|10:30p · NBC|PRIME BIGMKT STAR
+1229|NBA|Heat at Mavericks|8:00p · NBC|STAR
+1229|NCAAF|Alamo Bowl|9:00p · ESPN · San Antonio|PRIME HOLIDAY TBD
+1230|NCAAF|CFP Quarterfinal: Fiesta Bowl|7:30p · TNT|TENT ELIM PRIME TBD
+1230|NCAAF|Gator Bowl|11:30a · ESPN · Jacksonville|HOLIDAY TBD
+1230|NCAAF|Music City Bowl|3:00p · ESPN · Nashville|HOLIDAY TBD
+1231|NHL|Winter Classic: Avalanche at Mammoth|6:00p (4:00p MT) · TNT · Rice-Eccles Stadium|NOVEL HOLIDAY
+1231|NFL|TNF: Ravens at Bengals|8:15p · Prime|PRIME RIVAL HOLIDAY
+1231|NBA|Nuggets at Timberwolves|4:00p · Prime|STAR HOLIDAY
+1231|NCAAF|ReliaQuest Bowl|12:00p · ESPN · Tampa|HOLIDAY TBD
+1231|NCAAF|Las Vegas Bowl|3:45p · ESPN · Allegiant Stadium|HOLIDAY TBD
+0101|NCAAF|CFP Quarterfinal|12:00p · TNT|TENT ELIM HOLIDAY TBD
+0101|NCAAF|CFP Quarterfinal|4:00p · ABC/ESPN|TENT ELIM HOLIDAY TBD
+0101|NCAAF|CFP Quarterfinal|8:00p · ESPN|TENT ELIM PRIME TBD
+0102|NFL|Week 17 Saturday game 1|4:30p · NBC|PRIME TBD
+0102|NFL|Week 17 Saturday game 2|8:00p · Peacock|PRIME TBD
+0102|NCAAF|Citrus Bowl|12:00p · ABC · Orlando|HOLIDAY TBD
+0102|NCAAB|No. 5 Michigan State at No. 25 Nebraska|3:45p · CBS|TOP25
+0103|NFL|SNF: Eagles at 49ers|8:20p · NBC|PRIME STAR
+0103|NFL|Lions at Bears|4:25p · FOX|RIVAL BIGMKT
+0103|NFL|Giants at Cowboys|1:00p · FOX|RIVAL BIGMKT
+0104|NFL|MNF: Texans at Packers|8:15p · ESPN|PRIME
+0105|NBA|Timberwolves at Rockets|8:00p · NBC|PRIME STAR
+0105|NBA|Suns at Nuggets|10:00p · NBC|STAR
+0105|NCAAB|No. 20 Michigan at No. 25 Nebraska|7:00p · Peacock|TOP25
+0106|NBA|Knicks at Warriors|10:00p · ESPN|PRIME BIGMKT STAR
+0106|NBA|Thunder at 76ers|7:30p · ESPN|STAR
+0107|NBA|Celtics at Lakers|10:00p · Prime|BIGMKT RIVAL
+0107|NHL|Blackhawks vs. Rangers|7:00p · ESPN|BIGMKT
+0107|NHL|Wild vs. Golden Knights|9:30p · ESPN|STAR
+0108|NBA|Heat at 76ers|7:00p · ESPN|STAR
+0108|NBA|Suns at Mavericks|9:30p · ESPN|STAR
+0109|NFL|Week 18 game|1:00p · Netflix|TENT ELIM NOVEL TBD
+0109|NFL|Week 18 game|4:30p · ESPN/ABC|TENT ELIM TBD
+0109|NFL|Week 18 game|8:00p · ESPN/ABC|TENT ELIM PRIME TBD
+0109|NCAAB|No. 15 Kansas at No. 23 BYU|ESPN · time TBA|TOP25
+0109|NCAAB|No. 5 Michigan State at No. 9 UCLA|8:00p · FOX|TOP25 PRIME
+0110|NFL|Week 18 SNF (win-and-in game)|8:20p · NBC|ELIM PRIME TBD
+0110|NFL|Steelers at Ravens|time TBD|RIVAL ELIM TBD
+0110|NFL|Lions at Packers|time TBD|RIVAL ELIM TBD
+0111|NBA|Nuggets at Knicks|7:30p · Peacock|BIGMKT STAR
+0111|NBA|Lakers at Clippers|10:00p · Peacock|RIVAL BIGMKT STAR
+0112|NCAAB|Marquette at No. 4 UConn|7:00p · TNT|TOP25
+0112|NBA|Kings at Warriors|11:00p · NBC|STAR
+0112|NCAAB|No. 5 Michigan State at No. 21 USC|10:00p · Peacock|TOP25
+0113|NBA|Knicks at Celtics|7:00p · ESPN|PRIME RIVAL BIGMKT
+0113|NBA|Rockets at Thunder|9:30p · ESPN|STAR
+0113|NCAAB|Iowa State at No. 8 Houston|9:00p · Peacock|TOP25
+0114|NCAAF|CFP Semifinal: Orange Bowl|7:30p · TNT|ELIM PRIME TBD
+0114|NBA|Paris Game: Pelicans vs. Spurs (Wemby in France)|2:00p · Prime|NOVEL GLOBAL STAR
+0114|NHL|Panthers vs. Wild|9:30p · ESPN|STAR
+0115|NCAAF|CFP Semifinal: Sugar Bowl|7:30p · ABC/ESPN|ELIM PRIME TBD
+0116|NFL|Wild Card|4:30p|TENT ELIM TBD
+0116|NFL|Wild Card|8:00p|TENT ELIM PRIME TBD
+0116|NHL|Bruins vs. Rangers (Original Six)|12:00p · ABC|RIVAL BIGMKT
+0116|NCAAB|No. 1 Florida at No. 18 Alabama|Time/TV TBA|TOP25
+0116|NCAAB|No. 6 Virginia at No. 17 Miami|6:00p · ESPN|TOP25
+0117|NFL|Wild Card|1:00p|TENT ELIM TBD
+0117|NFL|Wild Card|4:30p|TENT ELIM TBD
+0117|NFL|Wild Card|8:15p · NBC|TENT ELIM PRIME TBD
+0117|NBA|Manchester Game: Spurs vs. Pelicans|10:30a · Prime|NOVEL GLOBAL STAR
+0117|NHL|Golden Knights at Hurricanes (Stanley Cup Final rematch)|6:00p|RIVAL
+0118|NFL|Wild Card MNF|8:15p · ESPN/ABC|TENT ELIM PRIME HOLIDAY TBD
+0118|NBA|MLK Day: Timberwolves at Knicks|5:00p · NBC|HOLIDAY BIGMKT
+0118|NBA|MLK Day: Pistons at Cavaliers|12:00p · NBC|HOLIDAY RIVAL
+0119|UCL|Inter vs. Liverpool|3:00p · Paramount+|GLOBAL STAR
+0119|NBA|Jazz at Nuggets|10:00p · NBC|STAR
+0119|NCAAB|No. 17 Miami at No. 10 Louisville|7:00p · ESPN|TOP25
+0119|NCAAB|No. 25 Nebraska at No. 3 Illinois|9:00p · Peacock|TOP25
+0120|NBA|Heat at Spurs|9:30p · ESPN|STAR
+0121|NBA|76ers at Celtics|7:30p · Prime|RIVAL BIGMKT STAR
+0121|NBA|Lakers at Warriors|10:00p · Prime|STAR BIGMKT
+0121|NHL|Red Wings vs. Wild|9:00p · ESPN|STAR
+0122|NBA|Timberwolves at Spurs|9:30p · ESPN|STAR
+0122|NBA|Knicks at Hawks|7:00p · ESPN|BIGMKT
+0122|NCAAB|No. 9 UCLA at No. 25 Nebraska|Time/TV TBA|TOP25
+0123|NFL|Divisional|4:30p|ELIM TBD
+0123|NFL|Divisional|8:15p|ELIM PRIME TBD
+0123|NCAAB|No. 20 Michigan at No. 21 USC|3:00p · NBC|TOP25
+0123|NCAAB|No. 11 Tennessee at No. 24 Kentucky|2:00p · ESPN|TOP25 RIVAL
+0124|NFL|Divisional|3:00p|ELIM TBD
+0124|NFL|Divisional|6:30p|ELIM PRIME TBD
+0124|NBA|Thunder at Warriors|8:30p · NBC|STAR
+0125|NCAAF|CFP National Championship|7:30p · ABC/ESPN · Allegiant Stadium|TENT PRIME TBD
+0126|NBA|Rivals Week: Thunder at Lakers|11:00p · NBC|RIVAL STAR BIGMKT
+0126|NBA|Rivals Week: Rockets at Spurs|8:00p · NBC|RIVAL STAR
+0126|TENNIS|Australian Open night session: Quarterfinals|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM
+0127|NBA|Rivals Week: Nuggets at Timberwolves|9:30p · ESPN|RIVAL STAR
+0127|NBA|Rivals Week: Pistons at Cavaliers|7:00p · ESPN|RIVAL
+0127|TENNIS|Australian Open night session: Quarterfinals|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM
+0128|NBA|Rivals Week: Heat at Bucks|9:30p · Prime|RIVAL STAR
+0128|NBA|Hawks at Knicks|7:00p · Prime|BIGMKT
+0128|TENNIS|Australian Open: Women's semifinals|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM
+0129|NBA|Cavaliers at Raptors|7:00p · ESPN|GLOBAL
+0129|NCAAB|No. 4 UConn at No. 13 St. John's|Madison Square Garden · time/TV TBA|TOP25 RIVAL BIGMKT
+0129|TENNIS|Australian Open: Men's semifinals|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM
+0130|NBA|Lakers at Knicks (Lakers' only MSG visit)|8:30p · ABC|PRIME BIGMKT STAR
+0130|NBA|Spurs at Warriors|5:30p · ABC|STAR
+0130|UFC|UFC 336: Van vs. Kape (flyweight title)|Paramount+ · Toronto|STAR GLOBAL
+0130|TENNIS|Australian Open: Women's final|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM
+0131|NFL|NFC Championship|3:00p · FOX|TENT ELIM
+0131|NFL|AFC Championship|6:30p · CBS|TENT ELIM PRIME
+0131|TENNIS|Australian Open: Men's final|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM
+0131|NHL|Flyers vs. Penguins|12:00p · ABC|RIVAL
+0201|NBA|Spurs at Warriors|10:00p · Peacock|STAR
+0201|NCAAB|No. 17 Miami at No. 2 Duke|7:00p · ESPN|TOP25
+0201|NCAAB|No. 15 Kansas at No. 8 Houston|9:00p · ESPN|TOP25
+0202|NBA|Lakers at Celtics|8:00p · NBC|PRIME RIVAL BIGMKT STAR
+0202|NCAAB|No. 9 UCLA at No. 3 Illinois|9:00p · Peacock|TOP25
+0202|NCAAB|No. 13 St. John's at Marquette|7:30p · TNT|TOP25 BIGMKT
+0203|NBA|Pioneers Classic: Knicks at Pistons|7:00p · ESPN|BIGMKT NOVEL
+0203|NBA|Jazz at Rockets|9:30p · ESPN|STAR
+0204|NBA|Mavericks at Nuggets|10:00p · Prime|STAR
+0205|NBA|Pacers at Thunder (2025 Finals rematch)|9:30p · Prime|RIVAL STAR
+0205|NCAAB|No. 5 Michigan State at No. 3 Illinois|8:00p · FOX|TOP25 PRIME
+0205|NHL|All-Star Skills Competition|7:00p · ESPN · UBS Arena|NOVEL STAR
+0206|NBA|Lakers at Spurs|8:30p · ABC|PRIME STAR BIGMKT
+0206|NBA|Trail Blazers at Grizzlies (Ja Morant's return)|5:30p · Prime|STAR
+0206|NHL|All-Star Game|3:00p · ABC · UBS Arena|TENT NOVEL STAR
+0206|NCAAB|No. 16 Texas Tech at No. 15 Kansas|12:00p · ABC|TOP25
+0206|NCAAB|No. 2 Duke at No. 6 Virginia|6:00p · ESPN|TOP25
+0207|NBA|Celtics at 76ers|7:00p · NBC|PRIME RIVAL BIGMKT
+0207|NBA|Knicks at Thunder|9:30p · NBC|STAR BIGMKT
+0208|NBA|Lakers at Suns|9:30p · Peacock|STAR BIGMKT
+0208|NCAAB|No. 10 Louisville at UNC|7:00p · ESPN|TOP25
+0208|NBA|Heat at Hawks|7:00p · Peacock|STAR
+0209|NBA|Rockets at Jazz|10:00p · NBC|PRIME
+0209|NBA|Spurs at Mavericks|8:00p · NBC|STAR
+0209|NCAAB|No. 3 Illinois at No. 20 Michigan|7:00p · Peacock|TOP25
+0210|NBA|Clippers at Lakers|10:00p · ESPN|RIVAL BIGMKT
+0210|NBA|Warriors at Celtics|7:30p · ESPN|RIVAL STAR BIGMKT
+0211|NFL|NFL Honors|Evening · time TBA|AWARD STAR
+0211|NBA|Spurs at Thunder|9:30p · Prime|RIVAL STAR
+0211|NBA|Knicks at 76ers|7:00p · Prime|RIVAL BIGMKT
+0212|NBA|Nuggets at Lakers|10:30p · ESPN|STAR BIGMKT
+0212|NBA|Timberwolves at Celtics|8:00p · Prime|STAR BIGMKT
+0213|NBA|Warriors at Knicks|8:30p · ABC|PRIME BIGMKT STAR
+0213|NBA|76ers at Thunder|5:30p · Prime|STAR
+0213|NCAAB|No. 5 Michigan State at No. 20 Michigan|1:00p · CBS|TOP25 RIVAL
+0213|NCAAB|North Carolina at No. 2 Duke|5:30p · ABC|TOP25 RIVAL
+0214|NFL|Super Bowl LXI|6:30p · ESPN/ABC · SoFi Stadium|TENT PRIME HOLIDAY STAR
+`;
+
+const SEASON_DAYS = 76;
+let TP_WEEKS = [
+  {wk:1, days:["1204","1205","1206"], label:"Fri–Sun Dec 4–6", name:"Conference Championship Weekend + CFP Selection Sunday", why:"Five title games, then the 12-team bracket reveal"},
+  {wk:2, days:["1212"], label:"Sat Dec 12", name:"Heisman Trophy Ceremony", why:"College football's biggest individual award"},
+  {wk:3, days:["1218","1219"], label:"Fri–Sat Dec 18–19", name:"CFP First Round", why:"Four elimination games on campus"},
+  {wk:4, days:["1225"], label:"Fri Dec 25", name:"Christmas Day", why:"Five NBA games and three NFL games"},
+  {wk:5, days:["1230","0101"], label:"Dec 30 + Jan 1", name:"CFP Quarterfinals", why:"Fiesta, Peach, Rose and Cotton Bowls"},
+  {wk:6, days:["0109"], label:"Sat Jan 9", name:"NFL Week 18 Saturday", why:"Playoff berths decided"},
+  {wk:7, days:["0116","0117","0118"], label:"Sat–Mon Jan 16–18", name:"NFL Wild Card Weekend", why:"Six elimination games over three days"},
+  {wk:8, days:["0125"], label:"Mon Jan 25", name:"CFP National Championship", why:"College football's title game, Allegiant Stadium, Las Vegas"},
+  {wk:9, days:["0131"], label:"Sun Jan 31", name:"AFC and NFC Championships", why:"Super Bowl berths on the line"},
+  {wk:10, days:["0206"], label:"Sat Feb 6", name:"NHL All-Star Game", why:"New five-nation 3-on-3 format at UBS Arena, on ABC"},
+  {wk:11, days:["0214"], label:"Sun Feb 14", name:"Super Bowl LXI", why:"Final tentpole of Season 1, SoFi Stadium"}
+];
+
+const SPORTS = [
+  ["NFL","NFL"],["NBA","NBA"],["NCAAF","College football"],["NCAAB","College hoops"],
+  ["NHL","NHL"],["UCL","Champions League"],["UFC","UFC"],["TENNIS","Australian Open"],["JUMBO","Jumbo original"]
+];
+const TAGS = {
+  TENT:"Weekly tentpole: the one marquee event or slate of each 7-day week",
+  ELIM:"Win-or-go-home stakes",
+  PRIME:"National primetime TV window",
+  HOLIDAY:"Holiday or cultural moment",
+  BIGMKT:"Big-market fan bases (NY, LA, CHI, DAL, BOS, PHI, Bay Area)",
+  STAR:"Star-driven storyline, easy player props",
+  RIVAL:"Rivalry or rematch",
+  TOP25:"College hoops game with at least one AP Top 25 team",
+  AWARD:"Awards or honors ceremony: predict the winners",
+  GLOBAL:"International audience",
+  NOVEL:"One-off format: outdoor, overseas, all-star, streaming exclusive",
+  CULTURE:"Pop-culture moment: awards shows, music, TV",
+  TBD:"Matchup or time not final yet"
+};
+
+// ---- Live data from the Google Sheet ----------------------------------
+// Live link to the "Jumbo Season 1 MASTER Calendar" Google Sheet (first tab).
+// The sheet must be shared as "Anyone with the link: Viewer".
+// A "Publish to web" CSV link also works here. Leave empty to use the saved copy above.
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1UuMb5HDfEZeEcuN2Zhfq0kYQ9GO451GsEo077FHSF5E/gviz/tq?tqx=out:csv&gid=0&headers=1";
+
+const SPORT_CODES = {
+  "nfl":"NFL","nba":"NBA","college football":"NCAAF","ncaaf":"NCAAF","cfb":"NCAAF",
+  "college basketball":"NCAAB","college hoops":"NCAAB","ncaab":"NCAAB","cbb":"NCAAB",
+  "nhl":"NHL","champions league":"UCL","ucl":"UCL","ufc":"UFC",
+  "australian open":"TENNIS","tennis":"TENNIS"
+};
+function parseCSV(text){
+  const rows=[]; let row=[], cell="", q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){cell+='"';i++;} else q=false; } else cell+=c; }
+    else if(c==='"') q=true;
+    else if(c===','){ row.push(cell); cell=""; }
+    else if(c==='\n'||c==='\r'){ if(c==='\r'&&text[i+1]==='\n') i++; row.push(cell); rows.push(row); row=[]; cell=""; }
+    else cell+=c;
+  }
+  if(cell!==""||row.length){ row.push(cell); rows.push(row); }
+  return rows.filter(r=>r.some(v=>v.trim()!==""));
+}
+function keyFromRow(dateStr, dayStr){
+  const m=(dateStr||"").trim().match(/^(\d{1,2})\/(\d{1,2})(?:\/\d{2,4})?$/) || (dateStr||"").trim().match(/^\d{4}-(\d{2})-(\d{2})$/);
+  if(m) return String(+m[1]).padStart(2,"0")+String(+m[2]).padStart(2,"0");
+  const n=parseInt(dayStr,10);
+  if(n>=1){ const d=new Date(Date.UTC(2026,11,1)+(n-1)*86400000); return String(d.getUTCMonth()+1).padStart(2,"0")+String(d.getUTCDate()).padStart(2,"0"); }
+  return null;
+}
+function rangeLabel(keys){
+  const ds=keys.map(k=>new Date(Date.UTC(k.startsWith("12")?2026:2027,+k.slice(0,2)-1,+k.slice(2)))).sort((a,b)=>a-b);
+  const f=(d,o)=>d.toLocaleDateString("en-US",{timeZone:"UTC",...o});
+  if(ds.length===1) return f(ds[0],{weekday:"short",month:"short",day:"numeric"}).replace(",","");
+  const consecutive=ds.every((d,i)=>i===0||d-ds[i-1]===86400000);
+  const a=ds[0], b=ds[ds.length-1];
+  if(consecutive && a.getUTCMonth()===b.getUTCMonth())
+    return `${f(a,{weekday:"short"})}–${f(b,{weekday:"short"})} ${f(a,{month:"short"})} ${a.getUTCDate()}–${b.getUTCDate()}`;
+  return ds.map(d=>f(d,{month:"short",day:"numeric"})).join(" + ");
+}
+async function loadSheet(){
+  const src=document.getElementById("src");
+  if(!SHEET_CSV_URL){ return; }
+  try{
+    const url=SHEET_CSV_URL+(SHEET_CSV_URL.includes("?")?"&":"?")+"_="+Date.now();
+    const res=await fetch(url,{cache:"no-store"});
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    const rows=parseCSV(await res.text());
+    const head=rows.shift().map(h=>h.trim().toLowerCase());
+    const col=name=>head.findIndex(h=>h.startsWith(name));
+    const ci={day:col("day"),date:col("date"),sport:col("sport"),event:col("event"),time:col("time"),tent:col("tentpole")};
+    const tagCols=head.map((h,i)=>/^tag/.test(h)?i:-1).filter(i=>i>=0);
+    const lines=[], tp={};
+    rows.forEach(r=>{
+      const k=keyFromRow(r[ci.date],r[ci.day]);
+      const sp=SPORT_CODES[(r[ci.sport]||"").trim().toLowerCase()];
+      const title=(r[ci.event]||"").trim();
+      if(!k||!sp||!title) return;
+      const tags=tagCols.flatMap(i=>(r[i]||"").split(/[,\s]+/)).map(t=>t.trim().toUpperCase()).filter(Boolean);
+      const clean=v=>(v||"").replace(/\|/g,"/").replace(/\s+/g," ").trim();
+      lines.push([k,sp,clean(title),clean(r[ci.time]),[...new Set(tags)].join(" ")].join("|"));
+      const t=ci.tent>=0?(r[ci.tent]||"").trim():"";
+      const m=t.match(/^wk\s*(\d+)\s*[:\-–]\s*(.+)$/i);
+      if(m && tags.includes("TENT")){ const wk=+m[1]; (tp[wk] ||= {wk,name:m[2].trim(),days:new Set()}).days.add(k); }
+    });
+    if(!lines.length) throw new Error("no rows");
+    DATA=lines.join("\n");
+    const old={}; TP_WEEKS.forEach(w=>old[w.wk]=w);
+    const weeks=Object.values(tp).sort((a,b)=>a.wk-b.wk).map(w=>{
+      const days=[...w.days].sort((a,b)=>(a<"06"?"1"+a:"0"+a)<(b<"06"?"1"+b:"0"+b)?-1:1);
+      return {wk:w.wk, days, label:rangeLabel(days), name:w.name, why:(old[w.wk]&&old[w.wk].name===w.name)?old[w.wk].why:""};
+    });
+    if(weeks.length) TP_WEEKS=weeks;
+    src.textContent="Live from the team sheet.";
+  }catch(e){
+    console.warn("Sheet load failed, using saved copy:",e);
+    src.textContent="Showing the saved copy (sheet unreachable).";
+  }
+}
+
+function boot(){
+const TENTPOLES = {};
+TP_WEEKS.forEach(w=>w.days.forEach(d=>TENTPOLES[d]=w));
+
+// parse
+const byDay = {};
+DATA.trim().split("\n").forEach(line=>{
+  const [k,s,t,tm,tg] = line.split("|");
+  (byDay[k] ||= []).push({s, t, tm: tm||"", tags: (tg||"").trim().split(/\s+/).filter(Boolean)});
+});
+Object.values(byDay).forEach(list=>list.forEach((e,i)=>e.slot=i+1));
+
+const START = Date.UTC(2026,11,1);
+const DAY = 86400000;
+const keyOf = d => String(d.getUTCMonth()+1).padStart(2,"0")+String(d.getUTCDate()).padStart(2,"0");
+const seasonDay = d => Math.round((d - START)/DAY) + 1;
+const inSeasonDay = n => n>=1 && n<=SEASON_DAYS;
+const dateOfKey = k => new Date(Date.UTC(k.startsWith("12")?2026:2027,+k.slice(0,2)-1,+k.slice(2)));
+const fmt = (d,opts)=>d.toLocaleDateString("en-US",{timeZone:"UTC",...opts});
+
+// state
+const state = { sports: new Set(SPORTS.map(s=>s[0])), tentOnly:false };
+try{
+  const saved = JSON.parse(localStorage.getItem("jumbo-s1-filters")||"null");
+  if(saved){ state.sports = new Set(saved.sports.filter(s=>SPORTS.some(x=>x[0]===s))); state.tentOnly = !!saved.tentOnly; }
+}catch(e){}
+const save = ()=>{ try{ localStorage.setItem("jumbo-s1-filters",JSON.stringify({sports:[...state.sports],tentOnly:state.tentOnly})); }catch(e){} };
+const visible = e => state.sports.has(e.s) && (!state.tentOnly || e.tags.includes("TENT"));
+const el = (tag,cls,html)=>{ const n=document.createElement(tag); if(cls) n.className=cls; if(html!=null) n.innerHTML=html; return n; };
+const esc = s => s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+// stats
+const all = Object.values(byDay).flat();
+const counts = {}; all.forEach(e=>counts[e.s]=(counts[e.s]||0)+1);
+document.getElementById("stats").innerHTML = [
+  [SEASON_DAYS,"Days"],[all.length,"Featured events"],[TP_WEEKS.length,"Tentpoles"],[Object.keys(counts).length,"Sports"]
+].map(([n,l])=>`<div class="stat"><b>${n}</b><span>${l}</span></div>`).join("");
+
+// filters
+const filters = document.getElementById("filters");
+function renderFilters(){
+  filters.innerHTML = `<span class="lbl">Show</span>`;
+  SPORTS.filter(([k])=>counts[k]).forEach(([k,name])=>{
+    const b = el("button",`fchip sp-${k}`,`<i></i>${name}<small>${counts[k]}</small>`);
+    b.type="button"; b.setAttribute("aria-pressed",state.sports.has(k));
+    b.onclick=()=>{ state.sports.has(k)?state.sports.delete(k):state.sports.add(k); update(); };
+    filters.append(b);
+  });
+  filters.append(el("span","sep"));
+  const t = el("button","fchip toggle",`★ Tentpoles only`);
+  t.type="button"; t.setAttribute("aria-pressed",state.tentOnly);
+  t.onclick=()=>{ state.tentOnly=!state.tentOnly; update(); };
+  filters.append(t);
+  const everything = state.sports.size===SPORTS.length && !state.tentOnly;
+  if(!everything){ const r=el("button","reset","Show everything"); r.type="button"; r.onclick=()=>{state.sports=new Set(SPORTS.map(s=>s[0]));state.tentOnly=false;update();}; filters.append(r); }
+}
+
+// tentpole strip
+const strip = document.getElementById("strip");
+TP_WEEKS.forEach(w=>{
+  const d = dateOfKey(w.days[0]);
+  const b = el("button","tp",`<span class="wk">Week ${w.wk}${w.wk===11?" · Final":""}</span><span class="nm">${esc(w.name)}</span><span class="dt">${esc(w.label)}</span>`);
+  b.type="button"; b.onclick=()=>openDay(d);
+  strip.append(b);
+});
+
+// months
+const monthsEl = document.getElementById("months");
+const MONTHS = [[2026,11],[2027,0],[2027,1]];
+function renderMonths(){
+  monthsEl.innerHTML="";
+  MONTHS.forEach(([y,m])=>{
+    const first = new Date(Date.UTC(y,m,1));
+    const days = new Date(Date.UTC(y,m+1,0)).getUTCDate();
+    const inS = [...Array(days)].map((_,i)=>seasonDay(new Date(Date.UTC(y,m,i+1)))).filter(inSeasonDay);
+    const sec = el("section");
+    const h = el("div","month-h",`<h3>${fmt(first,{month:"long"})} ${y}</h3><span>Season days ${inS[0]}–${inS[inS.length-1]}</span>`);
+    const grid = el("div","grid");
+    ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(d=>grid.append(el("div","dow",d)));
+    for(let i=0;i<first.getUTCDay();i++) grid.append(el("div","cell blank"));
+    for(let day=1;day<=days;day++){
+      const d = new Date(Date.UTC(y,m,day));
+      const sd = seasonDay(d), k = keyOf(d), evs = byDay[k]||[], tp = TENTPOLES[k];
+      const live = inSeasonDay(sd);
+      const cell = el(live?"button":"div","cell");
+      if(!live) cell.classList.add("out");
+      if(tp) cell.classList.add("tent");
+      cell.append(el("div","dhead",`<span class="dnum">${day}</span>${live?`<span class="dday">${tp?`<span class="tflag">★ Wk ${tp.wk}</span> `:""}D${sd}</span>`:""}`));
+      if(live){
+        cell.type="button";
+        cell.setAttribute("aria-label",`${fmt(d,{weekday:"long",month:"long",day:"numeric"})}, season day ${sd}, ${evs.length} events${tp?", tentpole":""}`);
+        const list = el("div","evs");
+        const shown = evs.filter(visible);
+        shown.forEach(e=>{
+          const c = el("div",`ev sp-${e.s}${e.tags.includes("TENT")?" tentev":""}`,`<span class="sp">${e.s}</span><span class="ti">${esc(e.t)}</span>${e.tm?`<span class="tm">${esc(e.tm.split(" · ")[0])}</span>`:""}`);
+          c.title = `${e.s} · ${e.t}${e.tm?" · "+e.tm:""}`;
+          list.append(c);
+        });
+        cell.append(list);
+        if(!shown.length){ cell.classList.add("dim"); cell.append(el("span","nomatch",evs.length?"Filtered out":"")); }
+        cell.onclick=()=>openDay(d);
+      }
+      grid.append(cell);
+    }
+    const tail = (first.getUTCDay()+days)%7;
+    if(tail) for(let i=tail;i<7;i++) grid.append(el("div","cell blank"));
+    sec.append(h,grid);
+    monthsEl.append(sec);
+  });
+}
+
+// key
+document.getElementById("key").innerHTML = Object.entries(TAGS).map(([t,d])=>`<div><span class="tag t-${t}">${t}</span><p>${esc(d)}</p></div>`).join("");
+
+// drawer
+const drawer=document.getElementById("drawer"), scrim=document.getElementById("scrim");
+let lastFocus=null;
+function openDay(d){
+  const k=keyOf(d), sd=seasonDay(d), evs=byDay[k]||[], tp=TENTPOLES[k];
+  document.getElementById("dr-k").textContent = `Day ${sd} of ${SEASON_DAYS} · Season week ${Math.floor((sd-1)/7)+1}`;
+  document.getElementById("dr-title").textContent = fmt(d,{weekday:"short",month:"short",day:"numeric"});
+  const b=document.getElementById("dr-b"); b.innerHTML="";
+  if(tp) b.append(el("div","banner",`<div class="k">★ Week ${tp.wk} tentpole · ${esc(tp.label)}</div><p>${esc(tp.name)}</p><div class="sb">${esc(tp.why)}</div>`));
+  if(!evs.length) b.append(el("p","empty","No featured events."));
+  evs.forEach(e=>{
+    const c=el("div",`dev sp-${e.s}`);
+    c.innerHTML=`<div class="top"><span class="sp">${e.s}</span><span class="slot">Event ${e.slot} of ${evs.length}</span></div><h5>${esc(e.t)}</h5>${e.tm?`<div class="tm">${esc(e.tm)}</div>`:""}${e.tags.length?`<div class="tags">${e.tags.map(t=>`<span class="tag t-${t}" title="${esc(TAGS[t]||t)}">${t}</span>`).join("")}</div>`:""}`;
+    if(!visible(e)) c.style.opacity=".55";
+    b.append(c);
+  });
+  lastFocus=document.activeElement;
+  scrim.hidden=false; drawer.hidden=false;
+  document.getElementById("dr-close").focus();
+}
+function closeDay(){ drawer.hidden=true; scrim.hidden=true; if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
+document.getElementById("dr-close").onclick=closeDay;
+scrim.onclick=closeDay;
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!drawer.hidden) closeDay(); });
+
+function update(){ save(); renderFilters(); renderMonths(); }
+update();
+}
+loadSheet().finally(boot);
+</script>
+
+</html>
