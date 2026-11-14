@@ -10,7 +10,7 @@
 :root{
   --bg:#F3F5F8; --surface:#FFFFFF; --ink:#131A2A; --muted:#5B6476; --line:#DDE2EA; --out:#ECEFF4;
   --accent:#2442D6; --gold:#C98F00; --gold-soft:#FFF3CC; --scrim:rgba(19,26,42,.38);
-  --nfl:#1E7A46; --nba:#C94F00; --ncaaf:#9B1C31; --ncaab:#0F7C86; --nhl:#2F6FB5; --ucl:#4B2BA8; --ufc:#C0262D; --tennis:#5E7B00; --jumbo:#2442D6;
+  --nfl:#1E7A46; --nba:#C94F00; --ncaaf:#9B1C31; --ncaab:#0F7C86; --nhl:#2F6FB5; --ucl:#4B2BA8; --ufc:#C0262D; --tennis:#5E7B00; --golf:#2E6B4F; --jumbo:#2442D6;
   --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
   --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
@@ -18,12 +18,12 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0D1120; --surface:#161B2C; --ink:#E8ECF5; --muted:#9AA3B8; --line:#283049; --out:#11152490;
   --accent:#8297FF; --gold:#F2C14B; --gold-soft:#3A2F12; --scrim:rgba(0,0,0,.55);
-  --nfl:#4CC27E; --nba:#FF8A3D; --ncaaf:#F06A80; --ncaab:#3CC6D2; --nhl:#6FA8EE; --ucl:#A28EF7; --ufc:#FF6B6B; --tennis:#B5D334; --jumbo:#8297FF;
+  --nfl:#4CC27E; --nba:#FF8A3D; --ncaaf:#F06A80; --ncaab:#3CC6D2; --nhl:#6FA8EE; --ucl:#A28EF7; --ufc:#FF6B6B; --tennis:#B5D334; --golf:#6CCB9A; --jumbo:#8297FF;
   color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0D1120; --surface:#161B2C; --ink:#E8ECF5; --muted:#9AA3B8; --line:#283049; --out:#11152490;
   --accent:#8297FF; --gold:#F2C14B; --gold-soft:#3A2F12; --scrim:rgba(0,0,0,.55);
-  --nfl:#4CC27E; --nba:#FF8A3D; --ncaaf:#F06A80; --ncaab:#3CC6D2; --nhl:#6FA8EE; --ucl:#A28EF7; --ufc:#FF6B6B; --tennis:#B5D334; --jumbo:#8297FF;
+  --nfl:#4CC27E; --nba:#FF8A3D; --ncaaf:#F06A80; --ncaab:#3CC6D2; --nhl:#6FA8EE; --ucl:#A28EF7; --ufc:#FF6B6B; --tennis:#B5D334; --golf:#6CCB9A; --jumbo:#8297FF;
   color-scheme:dark}
 
 *{box-sizing:border-box}
@@ -130,7 +130,7 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(34px,5vw,56px);l
 .banner{border:1px solid var(--gold);background:var(--gold-soft);border-radius:6px;padding:10px 12px}
 .banner .k{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
 .banner p{margin:2px 0 0;font-weight:600}
-.dev{--c:var(--muted);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:0 6px 6px 0;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.dev{--c:var(--muted);flex-shrink:0;border:1px solid var(--line);border-left:4px solid var(--c);border-radius:0 6px 6px 0;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
 .dev .top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
 .dev .sp{font-family:var(--f-mono);font-size:11px;font-weight:500;color:var(--c);letter-spacing:.06em}
 .dev .slot{font-family:var(--f-mono);font-size:10.5px;color:var(--muted)}
@@ -142,7 +142,7 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(34px,5vw,56px);l
 .bud span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-right:4px}
 .empty{color:var(--muted)}
 
-.sp-NFL{--c:var(--nfl)}.sp-NBA{--c:var(--nba)}.sp-NCAAF{--c:var(--ncaaf)}.sp-NCAAB{--c:var(--ncaab)}.sp-NHL{--c:var(--nhl)}.sp-UCL{--c:var(--ucl)}.sp-UFC{--c:var(--ufc)}.sp-TENNIS{--c:var(--tennis)}.sp-JUMBO{--c:var(--jumbo)}
+.sp-NFL{--c:var(--nfl)}.sp-NBA{--c:var(--nba)}.sp-NCAAF{--c:var(--ncaaf)}.sp-NCAAB{--c:var(--ncaab)}.sp-NHL{--c:var(--nhl)}.sp-UCL{--c:var(--ucl)}.sp-UFC{--c:var(--ufc)}.sp-TENNIS{--c:var(--tennis)}.sp-GOLF{--c:var(--golf)}.sp-JUMBO{--c:var(--jumbo)}
 
 @media (max-width:820px){
   .cell{min-height:64px;padding:4px 4px 6px;gap:3px}
@@ -202,61 +202,110 @@ let DATA = `
 1201|NBA|Jazz at Warriors|11:00p · NBC|PRIME STAR||
 1201|NCAAB|SEC/ACC Challenge: No. 2 Duke at No. 1 Florida|9:30p · ESPN|TOP25 RIVAL PRIME||
 1201|NCAAB|SEC/ACC Challenge: No. 19 Arkansas at UNC (7:30p ESPN) + No. 7 Texas at No. 10 Louisville (9:00p ESPN2)|7:30p & 9:00p · ESPN/ESPN2|TOP25||
-1202|NCAAB|SEC/ACC Challenge: No. 24 Kentucky at No. 6 Virginia + No. 22 Vanderbilt at Notre Dame|7:15p · ESPN/ACCN|TOP25||
+1202|NCAAB|SEC/ACC Challenge: No. 24 Kentucky at No. 6 Virginia|7:15p · ESPN|TOP25||
+1202|NBA|Nuggets at 76ers|7:00p|STAR BIGMKT||
+1202|NBA|Timberwolves at Clippers|10:30p|STAR BIGMKT||
 1202|NCAAB|SEC/ACC Challenge: No. 18 Alabama at No. 17 Miami|9:15p · ESPN|TOP25||
+1203|NBA|Cavaliers at Bulls|8:00p|BIGMKT||
 1203|NFL|TNF: Chiefs at Rams|8:15p · Prime|PRIME STAR BIGMKT||
+1203|GOLF|Hero World Challenge: Round 1|Golf Channel · time TBA · Albany, Bahamas|STAR GLOBAL||
 1204|NCAAF|Big 12 Championship|8:00p · ABC · AT&T Stadium|PRIME TENT|Launch|
-1204|NCAAF|Pac-12 Championship|8:00p · CBS/Paramount+ · campus site|TENT|Launch|
+1204|NCAAF|Pac-12 Championship|8:00p · CBS/Paramount+|TENT|Launch|
 1204|NBA|NBA Cup Quarterfinals|Prime|ELIM TBD||
+1204|GOLF|Hero World Challenge: Round 2|Golf Channel · time TBA · Albany, Bahamas|STAR GLOBAL||
 1205|NCAAF|SEC Championship|4:00p · ABC · Atlanta|TENT|Launch|
 1205|NCAAF|Big Ten Championship|8:00p · FOX · Indianapolis|TENT PRIME|Launch|
 1205|NCAAF|ACC Championship|12:00p · ABC · Charlotte|TENT|Launch|
 1205|NCAAB|No. 10 Louisville at No. 20 Michigan|12:00p · Peacock|TOP25||
+1205|NCAAB|No. 12 Arizona at No. 13 St. John's|12:00p · FOX|TOP25 BIGMKT||
+1205|NCAAB|No. 14 Gonzaga vs. No. 9 UCLA (Anaheim)|11:30p · FOX|TOP25 BIGMKT||
 1205|NBA|NBA Cup Quarterfinals (night 2)|Prime|ELIM TBD||
-1206|NCAAF|CFP Selection Sunday: 12-team bracket reveal|ESPN · time TBA|TENT|Launch|
-1206|NFL|SNF: Texans at Steelers|8:20p · NBC|PRIME||
+1205|GOLF|Hero World Challenge: Round 3|NBC/Golf Channel · time TBA · Albany, Bahamas|STAR GLOBAL||
+1206|NCAAB|Border Showdown: No. 15 Kansas vs. Missouri (Kansas City)|5:00p · ESPN|TOP25 RIVAL||
+1206|NCAAB|No. 11 Tennessee vs. NC State (Nashville)|7:00p · ESPN|TOP25 PRIME||
+1206|NFL|Jaguars at Bears|1:00p · FOX|BIGMKT||
 1206|NFL|Bills at Patriots|4:25p · CBS|RIVAL STAR||
+1206|NFL|SNF: Texans at Steelers|8:20p · NBC|PRIME||
+1206|NCAAF|CFP Selection Sunday: 12-team bracket reveal|ESPN · time TBA|TENT|Launch|
+1206|GOLF|Hero World Challenge: Final Round|NBC/Golf Channel · time TBA · Albany, Bahamas|STAR GLOBAL||
 1207|NFL|MNF: Cowboys at Seahawks|8:15p · ESPN|PRIME BIGMKT||
 1208|UCL|Barcelona vs. Man City|3:00p · Paramount+|GLOBAL STAR||
+1208|NHL|Blackhawks at Penguins|7:30p · TNT|PRIME STAR BIGMKT||
 1208|NCAAB|Jimmy V Classic: Georgia vs. No. 2 Duke|9:00p · ESPN · MSG|TOP25 BIGMKT|Tentpole|
 1208|NCAAB|Jimmy V Classic: No. 18 Alabama vs. No. 8 Houston|6:30p · ESPN · MSG|TOP25|Tentpole|
 1208|NBA|NBA Cup Semifinal(s)|Prime|ELIM TBD||
 1209|UCL|Arsenal vs. Real Madrid|3:00p · Paramount+|GLOBAL STAR||
+1209|NHL|Red Wings at Devils|7:00p · TNT|PRIME||
+1209|NHL|Sharks at Kings|9:30p · TNT|PRIME STAR BIGMKT||
 1209|NBA|NBA Cup Semifinal (if Wed)|Prime|ELIM TBD||
+1209|NCAAB|Utah State at No. 23 BYU|10:00p · FS1|TOP25 PRIME||
 1210|NFL|TNF: Vikings at Patriots|8:15p · Prime|PRIME||
-1210|NHL|Penguins vs. Panthers|7:00p · ESPN|STAR||
-1210|NHL|Capitals vs. Kraken|9:30p · ESPN|STAR||
+1210|NCAAB|Iowa State at Iowa|7:00p · FS1|RIVAL PRIME||
+1210|NHL|Penguins at Panthers|7:00p · ESPN|STAR||
+1210|NHL|Capitals at Kraken|9:30p · ESPN|STAR||
 1211|NBA|NBA Cup Championship|Prime · Hinkle Fieldhouse|ELIM|Tentpole|
+1211|NCAAB|No. 11 Tennessee at Purdue|8:00p · FOX|TOP25 PRIME||
 1212|NCAAF|Heisman Trophy Ceremony|Evening · time TBA|TENT AWARD|Tentpole|
 1212|NCAAF|Army vs. Navy|3:00p · CBS · MetLife Stadium|RIVAL||
 1212|NCAAB|No. 10 Louisville at No. 24 Kentucky|4:00p · ABC|TOP25 RIVAL||
+1212|NCAAB|C.M. Newton Classic: No. 18 Alabama vs. No. 13 St. John's (Birmingham)|3:30p · ESPN|TOP25||
+1212|NCAAB|No. 7 Texas vs. No. 17 Miami (Houston)|5:30p · ESPN|TOP25||
+1212|NCAAB|No. 15 Kansas at No. 4 UConn|8:00p · FOX|TOP25 PRIME||
+1212|NCAAB|No. 14 Gonzaga at Creighton|10:00p · FOX|TOP25 PRIME||
 1212|NBA|Knicks at Heat|8:30p · ABC|PRIME BIGMKT STAR||
 1212|UFC|UFC 335: Oliveira vs. Lopes (BMF title)|Paramount+ · T-Mobile Arena, Las Vegas|STAR||
-1213|NFL|SNF: Bills at Packers|8:20p · NBC|PRIME STAR||
+1213|NCAAB|LSU at No. 8 Houston|3:30p · ESPN|TOP25||
+1213|NCAAB|No. 21 USC vs. No. 16 Texas Tech (Fort Worth)|2:00p · ESPN2|TOP25 BIGMKT||
+1213|NFL|Saints at Panthers|1:00p · CBS|RIVAL||
 1213|NFL|Rams at 49ers|4:25p · FOX|RIVAL BIGMKT||
 1213|NFL|Chiefs at Bengals|4:25p · FOX|STAR||
-1214|NFL|MNF: Steelers at Jaguars|8:15p · ESPN|PRIME||
+1213|NFL|SNF: Bills at Packers|8:20p · NBC|PRIME STAR||
 1214|NBA|76ers at Magic|7:00p · Peacock|STAR||
+1214|NFL|MNF: Steelers at Jaguars|8:15p · ESPN|PRIME||
+1215|NCAAB|Tobacco Road Classic: NC State vs. North Carolina (Greensboro)|7:00p · ESPN2|RIVAL PRIME||
+1215|NCAAB|Clemson at South Carolina|9:00p · ESPN2|RIVAL PRIME||
+1215|NHL|Panthers at Bruins|7:00p · TNT|PRIME RIVAL BIGMKT||
+1215|NHL|Capitals at Stars|9:30p · TNT|PRIME STAR BIGMKT||
 1215|NBA|Spurs at Cavaliers|8:00p · NBC|PRIME STAR||
 1215|NBA|Nuggets at Trail Blazers|11:00p · NBC|STAR||
 1216|NBA|Lakers at Timberwolves|9:30p · ESPN|PRIME STAR BIGMKT||
+1216|NBA|Wizards at Celtics|7:00p · ESPN|PRIME BIGMKT||
+1216|NCAAB|Memphis at No. 7 Texas|9:00p · ESPN2|TOP25 PRIME||
+1216|NCAAB|No. 18 Alabama at South Florida|7:00p · ESPN2|TOP25 PRIME||
+1216|NHL|Rangers at Flyers|7:30p · TNT|PRIME RIVAL BIGMKT||
+1216|NHL|Sharks at Golden Knights|10:00p · TNT|PRIME STAR||
 1217|NFL|TNF: 49ers at Chargers|8:15p · Prime|PRIME BIGMKT||
+1217|NBA|Mavericks at 76ers|7:00p|STAR BIGMKT||
 1218|NCAAF|CFP First Round|8:00p · ESPN|TENT ELIM TBD|Tentpole|
 1218|NBA|Clippers at Heat|7:00p · Prime|PRIME BIGMKT||
 1219|NCAAF|CFP First Round tripleheader|12:00p ABC · 3:30p & 7:30p TNT|TENT ELIM TBD|Tentpole|
-1219|NFL|Seahawks at Eagles + Bears at Bills|5:00p FOX · 8:20p CBS|PRIME STAR||
+1219|NFL|Seahawks at Eagles|5:00p · FOX|PRIME STAR||
+1219|NFL|Bears at Bills|8:20p · CBS|PRIME STAR BIGMKT||
+1219|NBA|Lakers at Nuggets|9:00p|STAR BIGMKT||
 1219|NCAAB|CBS Sports Classic: UNC vs. No. 24 Kentucky|2:30p · CBS · MSG|TOP25 RIVAL BIGMKT|Tentpole|
 1219|NCAAB|CBS Sports Classic: No. 15 Kansas vs. Ohio State|12:00p · CBS · MSG|TOP25|Tentpole|
-1220|NFL|SNF: Lions at Vikings|8:20p · NBC|PRIME RIVAL||
+1219|NCAAB|Hall of Fame Series: No. 12 Arizona vs. No. 19 Arkansas (Phoenix)|6:30p · ESPN|TOP25||
+1219|NCAAB|Acrisure Series: No. 23 BYU vs. San Diego State (Palm Springs)|10:00p · TV TBA|TOP25||
+1220|NFL|Jaguars at Texans|1:00p · CBS|RIVAL||
 1220|NFL|Cowboys at Rams|4:25p · CBS|BIGMKT||
-1220|NFL|Ravens at Steelers|1:00p · CBS|RIVAL||
+1220|NFL|SNF: Lions at Vikings|8:20p · NBC|PRIME RIVAL||
+1220|NCAAB|No. 8 Houston vs. Florida State (neutral site)|1:00p · ESPN2|TOP25||
+1220|NCAAB|No. 4 UConn vs. No. 6 Virginia (Madison Square Garden)|3:00p · TV TBA|TOP25 BIGMKT||
+1220|NCAAB|Braggin' Rights: No. 3 Illinois vs. Missouri (St. Louis)|7:30p · ESPN2|TOP25 RIVAL PRIME||
+1221|NCAAB|No. 18 Alabama vs. Iowa (Des Moines)|7:00p · Peacock|TOP25||
+1221|NCAAB|No. 16 Texas Tech vs. No. 2 Duke (Madison Square Garden)|Time/TV TBA|TOP25 BIGMKT||
 1221|NFL|MNF: Patriots at Chiefs|8:15p · ESPN|PRIME STAR||
 1221|NBA|Knicks at Cavaliers (2026 East Finals rematch)|7:00p · Peacock|RIVAL BIGMKT||
+1221|NBA|Pacers at Lakers|10:00p|STAR BIGMKT||
 1221|NHL|Hurricanes at Golden Knights (Stanley Cup Final rematch)|10:00p · T-Mobile Arena|RIVAL||
 1222|NBA|Pistons at Thunder|8:00p · NBC|PRIME STAR||
 1222|NBA|Mavericks at Warriors|10:30p · NBC|STAR BIGMKT||
+1222|NHL|Blues at Lightning|7:00p · TNT|PRIME||
+1222|NHL|Golden Knights at Ducks|9:30p · TNT|PRIME||
 1223|NBA|Rockets at 76ers|7:30p · Prime|STAR||
 1223|NBA|Nuggets at Lakers|10:00p · Prime|STAR BIGMKT||
+1223|NCAAB|Georgetown at No. 4 UConn|3:00p · Peacock|TOP25||
+1223|NCAAB|No. 13 St. John's at Seton Hall|8:00p · FS1|TOP25 RIVAL PRIME||
 1224|NFL|TNF: Texans at Eagles|8:15p · Prime|PRIME HOLIDAY||
 1224|NCAAF|Hawai'i Bowl|7:00p · ESPN · Honolulu|HOLIDAY TBD||
 1225|NBA|Spurs at Knicks (2026 Finals rematch)|12:00p · ABC/ESPN|TENT HOLIDAY RIVAL BIGMKT|Tentpole|
@@ -269,153 +318,279 @@ let DATA = `
 1225|NFL|Rams at Seahawks|8:15p · FOX|TENT HOLIDAY RIVAL PRIME|Tentpole|
 1226|NFL|Saturday game 1|4:30p · NFL Network|PRIME TBD||
 1226|NFL|Saturday game 2|8:00p · NFL Network|PRIME TBD||
+1226|NBA|Trail Blazers at Wizards|1:00p|||
+1226|NBA|Suns at Mavericks|8:00p|STAR BIGMKT||
 1226|NCAAF|Pinstripe Bowl|12:00p · ABC · Yankee Stadium|BIGMKT HOLIDAY TBD||
 1227|NFL|49ers at Chiefs|4:25p · CBS|STAR||
 1227|NFL|SNF: Jaguars at Cowboys|8:20p · NBC|PRIME BIGMKT||
-1227|NFL|Patriots at Jets|1:00p · CBS|RIVAL BIGMKT||
+1227|NFL|Commanders at Vikings|Date/time TBD (Sat 12/26 or Sun 12/27)|TBD||
 1228|NFL|MNF: Giants at Lions|8:15p · ESPN|PRIME BIGMKT||
 1228|NBA|Cavaliers at Celtics|8:00p · NBC|BIGMKT||
 1228|NBA|Timberwolves at Nuggets|10:30p · NBC|STAR||
 1228|NCAAF|Holiday Bowl|5:00p · The CW · San Diego|HOLIDAY TBD||
 1229|NBA|Rockets at Lakers|10:30p · NBC|PRIME BIGMKT STAR||
 1229|NBA|Heat at Mavericks|8:00p · NBC|STAR||
+1229|NCAAB|No. 6 Virginia at Clemson|6:00p · ESPN2|TOP25||
+1229|NCAAB|San Diego State at No. 9 UCLA|10:00p · FS1|TOP25 PRIME BIGMKT||
 1229|NCAAF|Alamo Bowl|9:00p · ESPN · San Antonio|PRIME HOLIDAY TBD||
 1230|NCAAF|CFP Quarterfinal: Fiesta Bowl|7:30p · TNT|TENT ELIM PRIME TBD|Tentpole|
 1230|NCAAF|Gator Bowl|11:30a · ESPN · Jacksonville|HOLIDAY TBD||
 1230|NCAAF|Music City Bowl|3:00p · ESPN · Nashville|HOLIDAY TBD||
+1230|NCAAB|No. 13 St. John's at Providence|6:00p · FS1|TOP25||
+1230|NCAAB|No. 2 Duke at Georgia Tech|7:00p · ESPN|TOP25 PRIME||
+1230|NBA|Wizards at Raptors|7:30p|GLOBAL||
+1230|NBA|Rockets at Warriors|10:00p|STAR BIGMKT||
 1231|NHL|Winter Classic: Avalanche at Mammoth|6:00p (4:00p MT) · TNT · Rice-Eccles Stadium|NOVEL HOLIDAY|Tentpole|
 1231|NFL|TNF: Ravens at Bengals|8:15p · Prime|PRIME RIVAL HOLIDAY||
 1231|NBA|Nuggets at Timberwolves|4:00p · Prime|STAR HOLIDAY||
+1231|NBA|Knicks at Suns|9:00p|STAR BIGMKT HOLIDAY||
 1231|NCAAF|ReliaQuest Bowl|12:00p · ESPN · Tampa|HOLIDAY TBD||
 1231|NCAAF|Las Vegas Bowl|3:45p · ESPN · Allegiant Stadium|HOLIDAY TBD||
 0101|NCAAF|CFP Quarterfinal|12:00p · TNT|TENT ELIM HOLIDAY TBD|Tentpole|
 0101|NCAAF|CFP Quarterfinal|4:00p · ABC/ESPN|TENT ELIM HOLIDAY TBD|Tentpole|
 0101|NCAAF|CFP Quarterfinal|8:00p · ESPN|TENT ELIM PRIME TBD|Tentpole|
+0101|NBA|Spurs at Wizards|5:00p|STAR HOLIDAY||
+0101|NBA|Magic at Pistons|7:30p|HOLIDAY||
 0102|NFL|Week 17 Saturday game 1|4:30p · NBC|PRIME TBD||
 0102|NFL|Week 17 Saturday game 2|8:00p · Peacock|PRIME TBD||
 0102|NCAAF|Citrus Bowl|12:00p · ABC · Orlando|HOLIDAY TBD||
 0102|NCAAB|No. 5 Michigan State at No. 25 Nebraska|3:45p · CBS|TOP25||
+0102|NCAAB|No. 24 Kentucky at Oklahoma|12:00p · ESPN/ESPN2|TOP25||
+0102|NCAAB|No. 16 Texas Tech at Cincinnati|12:00p · FOX|TOP25||
+0102|NCAAB|Missouri at No. 19 Arkansas|4:00p · ESPN/ESPN2|TOP25||
+0102|NCAAB|No. 17 Miami at Pittsburgh|2:00p · ESPN/ESPN2|TOP25||
+0102|NCAAB|No. 3 Illinois at Wisconsin|8:00p · FOX|TOP25 PRIME||
+0102|NCAAB|TCU at No. 8 Houston|8:00p · ESPN2|TOP25 PRIME||
+0102|NCAAB|No. 12 Arizona at Iowa State|8:00p · ESPN|TOP25 PRIME||
+0102|NCAAB|No. 23 BYU at Arizona State|10:00p · ESPN2|TOP25 PRIME||
+0102|NCAAB|No. 1 Florida at No. 7 Texas|6:00p · ESPN/ESPN2|TOP25||
+0102|NCAAB|No. 22 Vanderbilt at No. 11 Tennessee|2:00p · ESPN/ESPN2|TOP25 RIVAL||
+0102|NCAAB|Kansas State at Baylor|12:00p · TV TBA|||
+0102|NBA|Knicks at Nuggets|5:00p|STAR BIGMKT||
 0103|NFL|SNF: Eagles at 49ers|8:20p · NBC|PRIME STAR||
 0103|NFL|Lions at Bears|4:25p · FOX|RIVAL BIGMKT||
 0103|NFL|Giants at Cowboys|1:00p · FOX|RIVAL BIGMKT||
+0103|NBA|Spurs at Timberwolves|7:00p|STAR||
+0103|NCAAB|No. 4 UConn at Creighton|2:00p · NBC|TOP25||
 0104|NFL|MNF: Texans at Packers|8:15p · ESPN|PRIME||
+0104|NBA|Bulls at Pacers|7:00p · Peacock|PRIME BIGMKT||
 0105|NBA|Timberwolves at Rockets|8:00p · NBC|PRIME STAR||
 0105|NBA|Suns at Nuggets|10:00p · NBC|STAR||
+0105|NHL|Sabres at Bruins|7:30p · TNT|PRIME BIGMKT||
 0105|NCAAB|No. 20 Michigan at No. 25 Nebraska|7:00p · Peacock|TOP25||
+0105|NCAAB|No. 2 Duke at Syracuse|7:00p · ESPN/ESPN2|TOP25 PRIME||
+0105|NCAAB|Ole Miss at No. 24 Kentucky|7:00p · ESPN/ESPN2|TOP25 PRIME||
+0105|NCAAB|No. 8 Houston at Kansas State|8:30p · FS1|TOP25 PRIME||
+0105|NCAAB|No. 7 Texas at Georgia|9:00p · ESPN/ESPNU|TOP25 PRIME||
+0105|NCAAB|North Carolina at No. 10 Louisville|9:00p · ESPN/ESPNU|TOP25 PRIME||
+0105|NCAAB|Purdue at No. 3 Illinois|9:00p · Peacock|TOP25 PRIME||
 0106|NBA|Knicks at Warriors|10:00p · ESPN|PRIME BIGMKT STAR||
 0106|NBA|Thunder at 76ers|7:30p · ESPN|STAR||
+0106|NHL|Bruins at Canadiens|7:30p · TNT|PRIME RIVAL GLOBAL||
+0106|NCAAB|No. 11 Tennessee at Auburn|7:00p · ESPN2/ESPNU|TOP25 PRIME||
+0106|NCAAB|Oklahoma at No. 1 Florida|9:00p · ESPN2|TOP25 PRIME||
+0106|NCAAB|Cincinnati at No. 23 BYU|10:30p · FS1|TOP25 PRIME||
+0106|NCAAB|Wisconsin at Iowa|8:30p · FS1|PRIME||
+0106|NCAAB|Baylor at No. 16 Texas Tech|8:00p · Peacock|TOP25 PRIME||
 0107|NBA|Celtics at Lakers|10:00p · Prime|BIGMKT RIVAL||
-0107|NHL|Blackhawks vs. Rangers|7:00p · ESPN|BIGMKT||
-0107|NHL|Wild vs. Golden Knights|9:30p · ESPN|STAR||
+0107|NBA|Timberwolves at Raptors|7:30p · Prime|PRIME GLOBAL||
+0107|NHL|Blackhawks at Rangers|7:00p · ESPN|BIGMKT||
+0107|NHL|Wild at Golden Knights|9:30p · ESPN|STAR||
 0108|NBA|Heat at 76ers|7:00p · ESPN|STAR||
 0108|NBA|Suns at Mavericks|9:30p · ESPN|STAR||
+0108|NCAAB|Purdue at No. 20 Michigan|8:00p · FOX|TOP25 PRIME||
 0109|NFL|Week 18 game|1:00p · Netflix|TENT ELIM NOVEL TBD|Tentpole|
 0109|NFL|Week 18 game|4:30p · ESPN/ABC|TENT ELIM TBD|Tentpole|
 0109|NFL|Week 18 game|8:00p · ESPN/ABC|TENT ELIM PRIME TBD|Tentpole|
-0109|NCAAB|No. 15 Kansas at No. 23 BYU|ESPN · time TBA|TOP25||
+0109|NCAAB|No. 15 Kansas at No. 23 BYU|1:00p · ESPN|TOP25||
+0109|NCAAB|No. 22 Vanderbilt at No. 1 Florida|11:00a · ESPN|TOP25||
+0109|NCAAB|NC State at North Carolina|12:00p · ESPN2|RIVAL||
+0109|NCAAB|No. 18 Alabama at No. 19 Arkansas|2:00p · ESPN2|TOP25||
+0109|NCAAB|Ohio State at No. 3 Illinois|4:00p · CBS|TOP25||
+0109|NCAAB|No. 24 Kentucky at Missouri|4:00p · ESPN2|TOP25||
+0109|NCAAB|Pittsburgh at No. 2 Duke|Time/TV TBA|TOP25||
+0109|NCAAB|No. 12 Arizona at Kansas State|12:00p · CBS|TOP25||
 0109|NCAAB|No. 5 Michigan State at No. 9 UCLA|8:00p · FOX|TOP25 PRIME||
 0110|NFL|Week 18 SNF (win-and-in game)|8:20p · NBC|ELIM PRIME TBD|Tentpole|
-0110|NFL|Steelers at Ravens|time TBD|RIVAL ELIM TBD|Tentpole|
 0110|NFL|Lions at Packers|time TBD|RIVAL ELIM TBD|Tentpole|
+0110|NFL|Seahawks at Rams|Date/time TBD (Sat 1/9 or Sun 1/10)|RIVAL ELIM BIGMKT TBD||
+0110|NCAAB|No. 8 Houston at Baylor|5:00p · ESPN2|TOP25||
 0111|NBA|Nuggets at Knicks|7:30p · Peacock|BIGMKT STAR||
-0111|NBA|Lakers at Clippers|10:00p · Peacock|RIVAL BIGMKT STAR||
-0112|NCAAB|Marquette at No. 4 UConn|7:00p · TNT|TOP25||
+0111|NBA|Cavaliers at Timberwolves|8:00p|STAR||
 0112|NBA|Kings at Warriors|11:00p · NBC|STAR||
+0112|NBA|Wizards at 76ers|8:00p · NBC|PRIME BIGMKT||
+0112|NCAAB|Marquette at No. 4 UConn|7:00p · TNT|TOP25||
 0112|NCAAB|No. 5 Michigan State at No. 21 USC|10:00p · Peacock|TOP25||
+0112|NCAAB|Auburn at No. 7 Texas|9:00p · ESPN/ESPN2|TOP25 PRIME||
+0112|NCAAB|No. 23 BYU at No. 12 Arizona|11:00p · ESPN|TOP25 PRIME||
+0112|NCAAB|No. 19 Arkansas at Texas A&M|7:00p · ESPN2/ESPNU|TOP25 PRIME||
 0113|NBA|Knicks at Celtics|7:00p · ESPN|PRIME RIVAL BIGMKT||
 0113|NBA|Rockets at Thunder|9:30p · ESPN|STAR||
+0113|NHL|Penguins at Islanders|7:30p · TNT|PRIME STAR BIGMKT||
 0113|NCAAB|Iowa State at No. 8 Houston|9:00p · Peacock|TOP25||
+0113|NCAAB|Missouri at No. 11 Tennessee|7:00p · ESPN2/ESPNU|TOP25 PRIME||
 0114|NCAAF|CFP Semifinal: Orange Bowl|7:30p · TNT|ELIM PRIME TBD|Tentpole|
 0114|NBA|Paris Game: Pelicans vs. Spurs (Wemby in France)|2:00p · Prime|NOVEL GLOBAL STAR||
-0114|NHL|Panthers vs. Wild|9:30p · ESPN|STAR||
+0114|NBA|Heat at Knicks|7:30p|RIVAL BIGMKT||
+0114|NBA|Magic at Lakers|10:00p|STAR BIGMKT||
+0114|NHL|Panthers at Wild|9:30p · ESPN|STAR||
 0115|NCAAF|CFP Semifinal: Sugar Bowl|7:30p · ABC/ESPN|ELIM PRIME TBD|Tentpole|
+0115|NBA|Jazz at Thunder|8:00p|STAR||
+0115|NBA|Magic at Clippers|10:30p|BIGMKT||
 0116|NFL|Wild Card|4:30p|TENT ELIM TBD|Tentpole|
 0116|NFL|Wild Card|8:00p|TENT ELIM PRIME TBD|Tentpole|
-0116|NHL|Bruins vs. Rangers (Original Six)|12:00p · ABC|RIVAL BIGMKT||
-0116|NCAAB|No. 1 Florida at No. 18 Alabama|Time/TV TBA|TOP25||
+0116|NHL|Bruins at Rangers (Original Six)|12:00p · ABC|RIVAL BIGMKT||
+0116|NBA|Mavericks at Knicks|7:30p|STAR BIGMKT||
+0116|NCAAB|No. 1 Florida at No. 18 Alabama|2:00p · ESPN/ESPN2|TOP25||
+0116|NCAAB|Oklahoma at No. 7 Texas|12:00p · ESPN/ESPN2|TOP25 RIVAL||
+0116|NCAAB|No. 22 Vanderbilt at No. 24 Kentucky|4:00p · ESPN/ESPN2|TOP25||
+0116|NCAAB|No. 19 Arkansas at No. 11 Tennessee|12:00p · ESPN/ESPN2|TOP25||
+0116|NCAAB|Iowa State at No. 16 Texas Tech|8:00p · TV TBA|TOP25||
+0116|NCAAB|Utah at No. 23 BYU|10:00p · TNT|TOP25 RIVAL PRIME||
 0116|NCAAB|No. 6 Virginia at No. 17 Miami|6:00p · ESPN|TOP25||
 0117|NFL|Wild Card|1:00p|TENT ELIM TBD|Tentpole|
 0117|NFL|Wild Card|4:30p|TENT ELIM TBD|Tentpole|
 0117|NFL|Wild Card|8:15p · NBC|TENT ELIM PRIME TBD|Tentpole|
 0117|NBA|Manchester Game: Spurs vs. Pelicans|10:30a · Prime|NOVEL GLOBAL STAR||
-0117|NHL|Golden Knights at Hurricanes (Stanley Cup Final rematch)|6:00p|RIVAL||
 0118|NFL|Wild Card MNF|8:15p · ESPN/ABC|TENT ELIM PRIME HOLIDAY TBD|Tentpole|
 0118|NBA|MLK Day: Timberwolves at Knicks|5:00p · NBC|HOLIDAY BIGMKT|Tentpole|
 0118|NBA|MLK Day: Pistons at Cavaliers|12:00p · NBC|HOLIDAY RIVAL|Tentpole|
+0118|NBA|76ers at Hawks|2:30p · NBC|HOLIDAY BIGMKT||
+0118|NHL|Lightning at Bruins|1:30p · TNT|HOLIDAY BIGMKT||
+0118|NHL|Capitals at Penguins|4:00p · TNT|HOLIDAY RIVAL STAR||
 0119|UCL|Inter vs. Liverpool|3:00p · Paramount+|GLOBAL STAR||
 0119|NBA|Jazz at Nuggets|10:00p · NBC|STAR||
+0119|NBA|Hornets at Mavericks|8:00p · NBC|PRIME BIGMKT||
 0119|NCAAB|No. 17 Miami at No. 10 Louisville|7:00p · ESPN|TOP25||
+0119|NCAAB|No. 16 Texas Tech at No. 8 Houston|7:00p · TV TBA|TOP25||
+0119|NCAAB|No. 6 Virginia at North Carolina|9:00p · ESPN|TOP25 PRIME||
+0119|NCAAB|Wisconsin at No. 9 UCLA|10:30p · FS1|TOP25 PRIME BIGMKT||
 0119|NCAAB|No. 25 Nebraska at No. 3 Illinois|9:00p · Peacock|TOP25||
 0120|NBA|Heat at Spurs|9:30p · ESPN|STAR||
+0120|NCAAB|Texas A&M at No. 1 Florida|7:00p · ESPN2/ESPNU|TOP25 PRIME||
+0120|NCAAB|No. 23 BYU at Iowa State|9:00p · FS1|TOP25 PRIME||
+0120|NHL|Stars at Blackhawks|7:30p · TNT|PRIME BIGMKT||
+0120|NHL|Oilers at Golden Knights|10:00p · TNT|PRIME STAR||
 0121|NBA|76ers at Celtics|7:30p · Prime|RIVAL BIGMKT STAR||
 0121|NBA|Lakers at Warriors|10:00p · Prime|STAR BIGMKT||
-0121|NHL|Red Wings vs. Wild|9:00p · ESPN|STAR||
+0121|NHL|Red Wings at Wild|9:00p · ESPN|STAR||
 0122|NBA|Timberwolves at Spurs|9:30p · ESPN|STAR||
 0122|NBA|Knicks at Hawks|7:00p · ESPN|BIGMKT||
-0122|NCAAB|No. 9 UCLA at No. 25 Nebraska|Time/TV TBA|TOP25||
+0122|NCAAB|No. 9 UCLA at No. 25 Nebraska|9:00p · FS1|TOP25||
+0122|NCAAB|No. 12 Arizona at No. 16 Texas Tech|8:00p · FOX|TOP25 PRIME||
 0123|NFL|Divisional|4:30p|ELIM TBD|Tentpole|
 0123|NFL|Divisional|8:15p|ELIM PRIME TBD|Tentpole|
+0123|NBA|76ers at Bulls|5:00p|BIGMKT||
 0123|NCAAB|No. 20 Michigan at No. 21 USC|3:00p · NBC|TOP25||
+0123|NCAAB|No. 1 Florida at Georgia|4:00p · ESPN/ESPN2/ESPNU|TOP25||
+0123|NCAAB|No. 19 Arkansas at No. 7 Texas|6:00p · ESPN/ESPN2/ESPNU|TOP25||
 0123|NCAAB|No. 11 Tennessee at No. 24 Kentucky|2:00p · ESPN|TOP25 RIVAL||
 0124|NFL|Divisional|3:00p|ELIM TBD|Tentpole|
 0124|NFL|Divisional|6:30p|ELIM PRIME TBD|Tentpole|
+0124|NCAAB|No. 3 Illinois at Indiana|12:00p · CBS|TOP25||
 0124|NBA|Thunder at Warriors|8:30p · NBC|STAR||
 0125|NCAAF|CFP National Championship|7:30p · ABC/ESPN · Allegiant Stadium|TENT PRIME TBD|Tentpole|
+0125|NBA|Raptors at Celtics|7:00p · Peacock|PRIME GLOBAL BIGMKT||
+0125|NBA|Kings at Nuggets|9:30p · Peacock|PRIME STAR||
 0126|NBA|Rivals Week: Thunder at Lakers|11:00p · NBC|RIVAL STAR BIGMKT||
 0126|NBA|Rivals Week: Rockets at Spurs|8:00p · NBC|RIVAL STAR||
+0126|NCAAB|No. 18 Alabama at Missouri|9:00p · ESPN|TOP25 PRIME||
+0126|NCAAB|No. 20 Michigan at No. 9 UCLA|10:00p · Peacock|TOP25 PRIME BIGMKT||
 0126|TENNIS|Australian Open night session: Quarterfinals|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM||
 0127|NBA|Rivals Week: Nuggets at Timberwolves|9:30p · ESPN|RIVAL STAR||
 0127|NBA|Rivals Week: Pistons at Cavaliers|7:00p · ESPN|RIVAL||
+0127|NHL|Panthers at Rangers|7:30p · TNT|PRIME RIVAL BIGMKT||
+0127|NCAAB|No. 23 BYU at TCU|7:00p · TV TBA|TOP25||
+0127|NCAAB|Clemson at No. 17 Miami|7:00p · ESPN2/ESPNU|TOP25 PRIME||
+0127|NCAAB|No. 22 Vanderbilt at Ole Miss|9:00p · ESPN2/ESPNU|TOP25 PRIME||
 0127|TENNIS|Australian Open night session: Quarterfinals|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM||
 0128|NBA|Rivals Week: Heat at Bucks|9:30p · Prime|RIVAL STAR||
 0128|NBA|Hawks at Knicks|7:00p · Prime|BIGMKT||
+0128|NHL|Islanders at Hurricanes|6:30p · TNT|BIGMKT||
+0128|NHL|Kraken at Wild|9:00p · TNT|PRIME||
 0128|TENNIS|Australian Open: Women's semifinals|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM||
 0129|NBA|Cavaliers at Raptors|7:00p · ESPN|GLOBAL||
-0129|NCAAB|No. 4 UConn at No. 13 St. John's|Madison Square Garden · time/TV TBA|TOP25 RIVAL BIGMKT||
+0129|NBA|Hornets at Timberwolves|9:30p · ESPN|PRIME||
+0129|NCAAB|No. 4 UConn at No. 13 St. John's|8:00p · FOX · Madison Square Garden|TOP25 RIVAL BIGMKT||
 0129|TENNIS|Australian Open: Men's semifinals|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM|Tentpole|
 0130|NBA|Lakers at Knicks (Lakers' only MSG visit)|8:30p · ABC|PRIME BIGMKT STAR||
 0130|NBA|Spurs at Warriors|5:30p · ABC|STAR||
+0130|NBA|Nuggets at Thunder|3:00p · ABC|STAR RIVAL||
+0130|NBA|76ers at Heat|12:30p · ABC|BIGMKT||
+0130|NCAAB|No. 24 Kentucky at No. 7 Texas|12:00p · ESPN/ESPN2|TOP25||
+0130|NCAAB|No. 23 BYU at No. 8 Houston|2:00p · TV TBA|TOP25||
+0130|NCAAB|No. 1 Florida at No. 11 Tennessee|8:30p · ESPN/ESPN2|TOP25 PRIME||
+0130|NCAAB|Auburn at No. 18 Alabama|6:30p · ESPN/ESPN2|TOP25 RIVAL||
+0130|NCAAB|Nashville Hoops Showdown: No. 3 Illinois vs. North Carolina|6:00p · ESPN/ESPN2 · Bridgestone Arena|TOP25||
+0130|NCAAB|No. 2 Duke at Clemson|4:00p · ESPN/ESPN2|TOP25||
+0130|NCAAB|Purdue at No. 5 Michigan State|3:00p · FOX|TOP25||
 0130|UFC|UFC 336: Van vs. Kape (flyweight title)|Paramount+ · Toronto|STAR GLOBAL||
 0130|TENNIS|Australian Open: Women's final|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM|Tentpole|
 0131|NFL|NFC Championship|3:00p · FOX|TENT ELIM|Tentpole|
 0131|NFL|AFC Championship|6:30p · CBS|TENT ELIM PRIME|Tentpole|
+0131|NBA|Rockets at Mavericks|8:30p · NBC|PRIME RIVAL BIGMKT||
 0131|TENNIS|Australian Open: Men's final|Overnight ET · ESPN · Melbourne|GLOBAL STAR ELIM|Tentpole|
-0131|NHL|Flyers vs. Penguins|12:00p · ABC|RIVAL||
+0131|NHL|Flyers at Penguins|12:00p · ABC|RIVAL||
 0201|NBA|Spurs at Warriors|10:00p · Peacock|STAR||
 0201|NCAAB|No. 17 Miami at No. 2 Duke|7:00p · ESPN|TOP25||
 0201|NCAAB|No. 15 Kansas at No. 8 Houston|9:00p · ESPN|TOP25||
 0202|NBA|Lakers at Celtics|8:00p · NBC|PRIME RIVAL BIGMKT STAR||
+0202|NBA|Timberwolves at Trail Blazers|11:00p · NBC|PRIME STAR||
 0202|NCAAB|No. 9 UCLA at No. 3 Illinois|9:00p · Peacock|TOP25||
 0202|NCAAB|No. 13 St. John's at Marquette|7:30p · TNT|TOP25 BIGMKT||
+0202|NCAAB|No. 24 Kentucky at Ole Miss|9:00p · ESPN/ESPN2|TOP25 PRIME||
+0202|NCAAB|Baylor at No. 23 BYU|8:00p · FS1|TOP25 PRIME||
 0203|NBA|Pioneers Classic: Knicks at Pistons|7:00p · ESPN|BIGMKT NOVEL||
 0203|NBA|Jazz at Rockets|9:30p · ESPN|STAR||
+0203|NCAAB|Georgia at No. 11 Tennessee|7:00p · ESPN2|TOP25 PRIME||
+0203|NHL|Lightning at Flyers|7:30p · TNT|PRIME BIGMKT||
 0204|NBA|Mavericks at Nuggets|10:00p · Prime|STAR||
+0204|NBA|Celtics at Hornets|7:30p · Prime|PRIME BIGMKT||
 0205|NBA|Pacers at Thunder (2025 Finals rematch)|9:30p · Prime|RIVAL STAR||
+0205|NBA|Pistons at 76ers|7:00p · Prime|PRIME BIGMKT||
 0205|NCAAB|No. 5 Michigan State at No. 3 Illinois|8:00p · FOX|TOP25 PRIME||
 0205|NHL|All-Star Skills Competition|7:00p · ESPN · UBS Arena|NOVEL STAR||
 0206|NBA|Lakers at Spurs|8:30p · ABC|PRIME STAR BIGMKT||
 0206|NBA|Trail Blazers at Grizzlies (Ja Morant's return)|5:30p · Prime|STAR||
 0206|NHL|All-Star Game|3:00p · ABC · UBS Arena|TENT NOVEL STAR|Tentpole|
 0206|NCAAB|No. 16 Texas Tech at No. 15 Kansas|12:00p · ABC|TOP25||
+0206|NCAAB|No. 7 Texas at No. 1 Florida|12:00p · ESPN|TOP25||
+0206|NCAAB|No. 18 Alabama at No. 24 Kentucky|2:00p · ESPN/ESPN2|TOP25||
+0206|NCAAB|No. 23 BYU at Utah|9:30p · ESPN2|TOP25 RIVAL PRIME||
+0206|NCAAB|Iowa at No. 9 UCLA|6:00p · FOX|TOP25 BIGMKT||
+0206|NCAAB|No. 8 Houston at No. 12 Arizona|ESPN · time TBA|TOP25||
 0206|NCAAB|No. 2 Duke at No. 6 Virginia|6:00p · ESPN|TOP25||
 0207|NBA|Celtics at 76ers|7:00p · NBC|PRIME RIVAL BIGMKT||
 0207|NBA|Knicks at Thunder|9:30p · NBC|STAR BIGMKT||
+0207|NBA|Warriors at Pistons|3:00p|STAR||
+0207|NCAAB|Creighton at No. 4 UConn|4:30p · FOX|TOP25||
 0208|NBA|Lakers at Suns|9:30p · Peacock|STAR BIGMKT||
 0208|NCAAB|No. 10 Louisville at UNC|7:00p · ESPN|TOP25||
+0208|NCAAB|TCU at No. 12 Arizona|9:00p · ESPN2|TOP25 PRIME||
 0208|NBA|Heat at Hawks|7:00p · Peacock|STAR||
 0209|NBA|Rockets at Jazz|10:00p · NBC|PRIME||
 0209|NBA|Spurs at Mavericks|8:00p · NBC|STAR||
 0209|NCAAB|No. 3 Illinois at No. 20 Michigan|7:00p · Peacock|TOP25||
+0209|NCAAB|No. 1 Florida at Auburn|7:00p · ESPN2|TOP25 PRIME||
+0209|NCAAB|No. 18 Alabama at No. 7 Texas|7:00p · ESPN|TOP25 PRIME||
 0210|NBA|Clippers at Lakers|10:00p · ESPN|RIVAL BIGMKT||
 0210|NBA|Warriors at Celtics|7:30p · ESPN|RIVAL STAR BIGMKT||
+0210|NCAAB|Creighton at No. 13 St. John's|6:30p · FS1|TOP25 BIGMKT||
+0210|NHL|Bruins at Maple Leafs|7:30p · TNT|PRIME RIVAL GLOBAL||
+0210|NHL|Blackhawks at Sharks|10:00p · TNT|PRIME STAR BIGMKT||
 0211|NFL|NFL Honors|Evening · time TBA|AWARD STAR|Tentpole|
 0211|NBA|Spurs at Thunder|9:30p · Prime|RIVAL STAR||
 0211|NBA|Knicks at 76ers|7:00p · Prime|RIVAL BIGMKT||
+0211|NHL|Wild at Hurricanes|7:30p · TNT|PRIME||
 0212|NBA|Nuggets at Lakers|10:30p · ESPN|STAR BIGMKT||
 0212|NBA|Timberwolves at Celtics|8:00p · Prime|STAR BIGMKT||
+0212|NCAAB|No. 3 Illinois at Purdue|8:00p · FOX|TOP25 PRIME||
 0213|NBA|Warriors at Knicks|8:30p · ABC|STAR BIGMKT PRIME||
 0213|NBA|76ers at Thunder|5:30p · Prime|STAR||
 0213|NCAAB|No. 5 Michigan State at No. 20 Michigan|1:00p · CBS|RIVAL TOP25||
+0213|NCAAB|No. 24 Kentucky at No. 11 Tennessee|4:00p · ESPN|TOP25 RIVAL||
+0213|NCAAB|No. 9 UCLA at No. 21 USC|5:30p · FOX|TOP25 RIVAL BIGMKT||
+0213|NCAAB|No. 19 Arkansas at No. 18 Alabama|8:00p · ESPN2|TOP25 PRIME||
 0213|NCAAB|North Carolina at No. 2 Duke|5:30p · ABC|RIVAL TOP25||
 0214|NFL|Super Bowl LXI|6:30p · ESPN/ABC · SoFi Stadium|PRIME TENT STAR HOLIDAY|Finale|
 `;
@@ -437,7 +612,7 @@ let TP_WEEKS = [
 
 const SPORTS = [
   ["NFL","NFL"],["NBA","NBA"],["NCAAF","College football"],["NCAAB","College hoops"],
-  ["NHL","NHL"],["UCL","Champions League"],["UFC","UFC"],["TENNIS","Australian Open"],["JUMBO","Jumbo original"]
+  ["NHL","NHL"],["UCL","Champions League"],["UFC","UFC"],["TENNIS","Australian Open"],["GOLF","Golf"],["JUMBO","Jumbo original"]
 ];
 const TAGS = {
   TENT:"Weekly tentpole: the one marquee event or slate of each 7-day week",
@@ -467,7 +642,7 @@ const SPORT_CODES = {
   "nfl":"NFL","nba":"NBA","college football":"NCAAF","ncaaf":"NCAAF","cfb":"NCAAF",
   "college basketball":"NCAAB","college hoops":"NCAAB","ncaab":"NCAAB","cbb":"NCAAB",
   "nhl":"NHL","champions league":"UCL","ucl":"UCL","ufc":"UFC",
-  "australian open":"TENNIS","tennis":"TENNIS"
+  "australian open":"TENNIS","tennis":"TENNIS","golf":"GOLF"
 };
 function parseCSV(text){
   const rows=[]; let row=[], cell="", q=false;
